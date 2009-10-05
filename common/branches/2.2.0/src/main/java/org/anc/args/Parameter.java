@@ -1,4 +1,6 @@
-package org.anc.util;
+package org.anc.args;
+
+import java.util.*;
 
 public class Parameter
 {
@@ -10,6 +12,7 @@ public class Parameter
    protected String command;
    protected String description;
    protected String type;
+   protected Set<String> validChoices = null;
    
    public Parameter(String command, String description)
    {
@@ -41,6 +44,27 @@ public class Parameter
    public static Parameter flag(String command, String description)
    {
       return new Parameter(command, description, null);
+   }
+   
+   public static Parameter choice(String command, String description, String[] choices)
+   {
+      HashSet<String> valid = new HashSet<String>();
+      StringBuilder format = new StringBuilder();
+      format.append('[');
+      String choice = choices[0];
+      format.append(choice);
+      valid.add(choice);
+      for (int i = 1; i < choices.length; ++i)
+      {
+         choice = choices[i];
+         format.append('|');         
+         format.append(choice);
+         valid.add(choice);
+      }
+      format.append(']');
+      Parameter p = new Parameter(command, description, format.toString());
+      p.validChoices = valid;
+      return p;
    }
    
    public String type() { return type; }
@@ -95,5 +119,14 @@ public class Parameter
       builder.append(": ");
       builder.append(description);
       return builder.toString();
+   }
+   
+   public boolean valid(String choice)
+   {
+      if (validChoices == null)
+      {
+         return false;
+      }
+      return validChoices.contains(choice);
    }
 }
