@@ -2,11 +2,14 @@ package org.anc.util;
 
 import static org.junit.Assert.*;
 
+import org.anc.args.IParameters;
+import org.anc.args.Parameter;
+import org.anc.args.Parameters;
 import org.junit.Test;
 
 public class ParametersTest
 {
-   public static class Params
+   public static class Params implements IParameters
    {
       public static final Parameter IN = new Parameter("-in", "input");
       public static final Parameter OUT = new Parameter("-out", "output");

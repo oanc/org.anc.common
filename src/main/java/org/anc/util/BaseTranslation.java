@@ -21,11 +21,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Map.Entry;
 
 /**
  * The BaseTranslation class is used to provide alternate language translations
@@ -99,9 +103,24 @@ import java.util.Map.Entry;
  */
 public class BaseTranslation
 {
+   /**
+    * Annotation type used by subclasses to declare default values for the
+    * String constants.
+    * 
+    * @author Keith Suderman
+    *
+    */
+   @Documented
+   @Retention(RetentionPolicy.RUNTIME)
+   public @interface Default
+   {
+      String value();
+   }
+   
    public static final class SystemProperties
    {
       public static final String LANG = "org.anc.lang";
+      public static final String DEFAULT_LANG_LOCATION = "lang";
    }
 
    public BaseTranslation()
@@ -151,13 +170,14 @@ public class BaseTranslation
 
    public void write(File file) throws IOException
    {
-      write(file, "Default translation.");
+      write(new FileOutputStream(file), "Default translation.");
    }
 
-   public void write(File file, String comment) throws IOException
+//   public void write(File file, String comment) throws IOException
+   public void write(OutputStream out, String comment)
    {
       Properties props = new Properties();
-      FileOutputStream out = null;
+//      FileOutputStream out = null;
       try
       {
          Class<? extends BaseTranslation> theClass = this.getClass();
@@ -166,9 +186,12 @@ public class BaseTranslation
          {
             String name = field.getName();
             String value = (String) field.get(this);
+//            System.out.println("Field name : " + name);
+//            System.out.println("Field value : " + value);
+            
             props.setProperty(name, value);
          }
-         out = new FileOutputStream(file);
+//         out = new FileOutputStream(file);
          props.store(out, comment);
 
       }
@@ -183,46 +206,157 @@ public class BaseTranslation
       }
       finally
       {
-         if (out != null)
+         if (out != null) try
          {
             out.close();
+         }
+         catch(IOException e)
+         {
+            // nothing we can do, so do nothing.
          }
       }
    }
 
    protected void init(Class<? extends BaseTranslation> subclass)
    {
-      init(getClassName(subclass));
+      String className = getClassName(subclass);
+      Properties translation = new Properties();
+      // First check if the system property has been set manually.  This will
+      // override all other methods of determining the language file to use.
+      String lang = System.getProperty(SystemProperties.LANG);
+      if (!loadLanguage(lang, className, translation))
+      {
+         // That didn't work, so check for a language file specified by country
+         // and language code.
+         Locale locale = Locale.getDefault();
+         String country = locale.getCountry();
+         lang = locale.getLanguage();
+         if (!loadLanguage(lang + "-" + country, className, translation))
+         {
+            // That didn't work either, try just the language code. If this
+            // doesn't work the default values will be used.
+            loadLanguage(lang, className, translation);
+         }
+      }
+            
+      Field[] fields = subclass.getDeclaredFields();
+      for (Field field : fields)
+      {
+         int modifiers = field.getModifiers();
+//         String fieldClass = field.getType().getName();
+//         String access = Modifier.isPublic(modifiers) ? "public " : "";
+//         String sFinal = Modifier.isFinal(modifiers) ? "final " : "";
+//         System.out.println(access + sFinal + field.getName() + " " + fieldClass);
+         if (field.getType().equals(String.class) &&
+//               Modifier.isFinal(modifiers) && 
+               Modifier.isPublic(modifiers))
+         {
+            String value = translation.getProperty(field.getName());
+            if (value == null)
+            {
+               Default defaultValue = field.getAnnotation(Default.class);
+               if (defaultValue != null)
+               {
+                  value = defaultValue.value();
+               }
+            }
+            if (Modifier.isFinal(modifiers))
+            {
+               field.setAccessible(true);
+            }
+            try
+            {
+               field.set(this, value);
+            }
+            catch (IllegalArgumentException e)
+            {
+               e.printStackTrace();
+            }
+            catch (IllegalAccessException e)
+            {
+               e.printStackTrace();
+            }
+         }
+      }
    }
 
-   protected void init(String className)
+   protected static boolean loadLanguage(String lang, String className, Properties props)
    {
-      String lang = System.getProperty(SystemProperties.LANG);
       if (lang == null)
       {
-         return;
+         return false;
       }
-      File file = new File("lang/" + className + "." + lang);
-      if (file.exists())
+      
+      File file = new File(SystemProperties.DEFAULT_LANG_LOCATION + "/" 
+            + className + "." + lang);
+      if (!file.exists())
       {
-         try
-         {
-//			System.out.println("Loading language file from " + file.getAbsolutePath());
-            init(file);
-         }
-         catch (Exception ex)
-         {
-            System.out.println("Error loading the specified language file.");
-            ex.printStackTrace();
-         }
+         return false;
       }
-      else
+      try
       {
-         System.out
-               .println("The specified language file could not be loaded from "
-                     + file.getAbsolutePath());
+         loadProperties(file, props);
       }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return false;
+      }
+      return true;
    }
+   
+   protected static void loadProperties(File propFile, Properties props)
+         throws IOException, SecurityException, IllegalArgumentException,
+         NoSuchFieldException, IllegalAccessException
+   {
+      FileInputStream out = null;
+      try
+      {
+         out = new FileInputStream(propFile);
+         props.load(out);
+      }
+      finally
+      {
+         if (out != null)
+         {
+            out.close();
+         }
+      }
+}
+
+//   protected void init(Class<? extends BaseTranslation> subclass)
+//   {
+//      init(getClassName(subclass));
+//   }
+//
+//   protected void init(String className)
+//   {
+//      String lang = System.getProperty(SystemProperties.LANG);
+//      if (lang == null)
+//      {
+//         return;
+//      }
+//      File file = new File("lang/" + className + "." + lang);
+//      if (file.exists())
+//      {
+//         try
+//         {
+////			System.out.println("Loading language file from " + file.getAbsolutePath());
+//            init(file);
+//         }
+//         catch (Exception ex)
+//         {
+//            System.out.println("Error loading the specified language file.");
+//            ex.printStackTrace();
+//         }
+//      }
+//      else
+//      {
+//         System.out
+//               .println("The specified language file could not be loaded from "
+//                     + file.getAbsolutePath());
+//      }
+//   }
 
    protected static String getClassName(Class<?> theClass)
    {
@@ -251,25 +385,25 @@ public class BaseTranslation
 // init(props, instance);
 // }
 
-   protected void init(File propFile) throws IOException, SecurityException,
-         IllegalArgumentException, NoSuchFieldException, IllegalAccessException
-   {
-      java.util.Properties props = new java.util.Properties();
-      FileInputStream out = null;
-      try
-      {
-         out = new FileInputStream(propFile);
-         props.load(out);
-         init(props);
-      }
-      finally
-      {
-         if (out != null)
-         {
-            out.close();
-         }
-      }
-   }
+//   protected void init(File propFile) throws IOException, SecurityException,
+//         IllegalArgumentException, NoSuchFieldException, IllegalAccessException
+//   {
+//      java.util.Properties props = new java.util.Properties();
+//      FileInputStream out = null;
+//      try
+//      {
+//         out = new FileInputStream(propFile);
+//         props.load(out);
+//         init(props);
+//      }
+//      finally
+//      {
+//         if (out != null)
+//         {
+//            out.close();
+//         }
+//      }
+//   }
 
 //	protected void init(String propPath)
 //	throws FileNotFoundException, IOException, SecurityException,
@@ -280,33 +414,33 @@ public class BaseTranslation
 //		init(props);
 //	}
 
-   protected void init(Properties props) throws SecurityException,
-         NoSuchFieldException, IllegalArgumentException, IllegalAccessException
-   {
-      Class<? extends BaseTranslation> theClass = this.getClass();
-      for (Entry<Object, Object> entry : props.entrySet())
-      {
-         String key = (String) entry.getKey();
-         String value = (String) entry.getValue();
-         Field field = theClass.getField(key);
-         if (field == null)
-         {
-            System.out.println("Invalid key \"" + key
-                  + "\" in the language file.");
-         }
-         else
-         {
-//				System.out.println("Setting " + key + "=" + value);
-            int modifiers = field.getModifiers();
-            if (Modifier.isFinal(modifiers))
-            {
-               field.setAccessible(true);
-            }
-            field.set(this, value);
-            
-//				System.out.println("Set " + key + "=" + field.get(this).toString());				
-         }
-      }
-   }
+//   protected void init(Properties props) throws SecurityException,
+//         NoSuchFieldException, IllegalArgumentException, IllegalAccessException
+//   {
+//      Class<? extends BaseTranslation> theClass = this.getClass();
+//      for (Entry<Object, Object> entry : props.entrySet())
+//      {
+//         String key = (String) entry.getKey();
+//         String value = (String) entry.getValue();
+//         Field field = theClass.getField(key);
+//         if (field == null)
+//         {
+//            System.out.println("Invalid key \"" + key
+//                  + "\" in the language file.");
+//         }
+//         else
+//         {
+////				System.out.println("Setting " + key + "=" + value);
+//            int modifiers = field.getModifiers();
+//            if (Modifier.isFinal(modifiers))
+//            {
+//               field.setAccessible(true);
+//            }
+//            field.set(this, value);
+//            
+////				System.out.println("Set " + key + "=" + field.get(this).toString());				
+//         }
+//      }
+//   }
 
 }
