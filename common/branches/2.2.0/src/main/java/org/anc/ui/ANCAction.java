@@ -19,6 +19,7 @@ package org.anc.ui;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
 /**
  * An abstract class that simply provides a few constructors for the
@@ -40,5 +41,12 @@ public abstract class ANCAction extends AbstractAction
    {
       super(name, icon);
       putValue(Action.SHORT_DESCRIPTION, desc);
+   }
+
+   public ANCAction(String name, String desc, KeyStroke hotKey)
+   {
+      super(name);
+      putValue(Action.SHORT_DESCRIPTION, desc);
+      putValue(Action.ACCELERATOR_KEY, hotKey);
    }
 }
