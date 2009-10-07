@@ -31,7 +31,7 @@ import java.awt.Insets;
  * variables via the GBC class rather than having to type
  * <tt>GridBagConstraints</tt> all the time.
  * <p>
- * The GridBagLayout manager makes its own copy of the GridBagConstaints object
+ * The GridBagLayout manager makes its own copy of the GridBagConstraints object
  * so it is possible to use the same GBC object for all controls that you add to
  * a container. For example: <code>
  * JPanel aPanel = new JPanel(new GridBagLayout());
