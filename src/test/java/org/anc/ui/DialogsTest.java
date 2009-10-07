@@ -2,14 +2,18 @@ package org.anc.ui;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
+import org.junit.*;
 
 public class DialogsTest {
 
-	@Test
+	@Ignore
 	public void testErrorBoxComponentException() {
 		Exception e = new Exception("This is a test exception");
 		Dialogs.errorBox(null, e);
 	}
 
+	public static void main(String[] args)
+	{
+		new DialogsTest().testErrorBoxComponentException();
+	}
 }

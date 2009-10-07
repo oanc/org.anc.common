@@ -134,18 +134,28 @@ public class Dialogs
       StackTraceElement[] trace = ex.getStackTrace();
       JPanel panel = new JPanel();
       panel.setLayout(new GridBagLayout());
-      JLabel label = new JLabel("CAUSE: " + ex.getMessage());
-      label.setForeground(Color.RED);
       GBC gbc = new GBC();
       gbc.anchorLeft();
-//    gbc.insets(1, 5, 2, 10);
-      panel.add(label, gbc);
       
-//    gbc.insets(1, 15, 2, 10);
+      JTextPane txtPn = new JTextPane();
+      txtPn.setLayout(new GridBagLayout());
+      txtPn.setText("CAUSE: " + ex.getMessage());
+      txtPn.setForeground(Color.RED);
+      txtPn.setBackground(panel.getBackground());
+      //setEditable used so users cannot delete the message accidentally
+      txtPn.setEditable(false);
+      panel.add(txtPn, gbc);
+
+      String s = new String();
       for (int i = 0; i < trace.length; ++i)
-      {
-         panel.add(new JLabel("     " + trace[i].toString()), gbc.down());
+      {  s += ("     " + trace[i].toString()) + "\n";
       }
+      JTextPane msgPn = new JTextPane();
+      msgPn.setText(s);
+      msgPn.setBackground(panel.getBackground());
+      msgPn.setEditable(false);
+      panel.add(msgPn, gbc.down());
+      
       JScrollPane scroll = new JScrollPane(panel);
       scroll.setPreferredSize(new Dimension(400, 250));
       errorBox(parent, scroll, title);
