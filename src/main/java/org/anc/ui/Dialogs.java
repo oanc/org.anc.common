@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 
 /**
@@ -139,6 +140,7 @@ public class Dialogs
       gbc.anchorLeft();
 //    gbc.insets(1, 5, 2, 10);
       panel.add(label, gbc);
+      
 //    gbc.insets(1, 15, 2, 10);
       for (int i = 0; i < trace.length; ++i)
       {
