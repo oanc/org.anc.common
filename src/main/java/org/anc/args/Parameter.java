@@ -2,6 +2,11 @@ package org.anc.args;
 
 import java.util.*;
 
+/**
+ * 
+ * @author Keith Suderman
+ * @since 2.2.0
+ */
 public class Parameter
 {
    public static final String STRING = "<string>";

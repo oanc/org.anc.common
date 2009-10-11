@@ -18,7 +18,33 @@ package org.anc.util;
 
 import java.util.Stack;
 
-/**
+/** 
+ * Instances of the IndentManager class are used to control the indentation
+ * level when pretty printing text/xml output. By default the IndentManager
+ * will use an indentation size of four spaces, but this can be changed with
+ * the parameterized constructor <code>IndentManager(String)</code>/
+ * <p>
+ * Everytime the {@link #more()} method is called the current indentation 
+ * level is pushed onto a stack and the indentation level is increased by the
+ * default amount.  Everytime the {@link #less()} method is called the stack
+ * is popped and the current indentation level is set to the String popped from
+ * the stack.
+ * <p>
+ * <b>Example</b>
+ * <pre>
+ *     IndentManager indent = new IndentManager();
+ *     System.out.println(indent + "&lt;start&gt;");
+ *     prettyPrintSomething(indent);
+ *     System.out.println(indent + "&lt;/start&gt;");
+ *     ...
+ *     void prettyPrintSomething(IndentManager indent)
+ *     {
+ *         indent.more();
+ *         System.out.println(indent + "&lt;something/&gt;");
+ *         indent.less();
+ *     }
+ * </pre>
+ * 
  * @author Keith Suderman
  * @version 1.0
  */
