@@ -33,24 +33,64 @@ import java.util.ResourceBundle;
 
 /**
  * The BaseTranslation class is used to provide alternate language translations
- * for the text used in an application.
+ * for the static text used in an application.
  * <p>
- * Users should extend the BaseTranslation class and define public String
- * instance fields to be used in the application. The BaseTranslation class
- * provides functionality for initializing these fields from a properties file.
+ * Users should extend the BaseTranslation class and define <code>public final
+ * String</code> instance fields to be used in the application. The 
+ * BaseTranslation class provides functionality for initializing these fields 
+ * from a properties file.
  * <p>
- * For example:
+ * The <code>public final String</code> fields should be initialized to 
+ * <code>null</code> and the default value to use specified with a
+ * {@link #Default} annotation on the field. 
+ * <p>
+ * Derived classes <i>must</i> call the <code>BaseTranslation.init</code> 
+ * method in the constructor to initialize the <code>public final String</code>
+ * fields. The <code>BaseTranslation</code> class will look for language files
+ * in a directory named <code>lang</code> in the application's directory. The
+ * language file to use is determined by:
+ * <ol>
+ * <li>The value of the <code>org.anc.lang</code> Java system property.
+ * <li>The current Java locale in use.
+ * <li>The default values provided as annotations to the fields.
+ * </ol>
+ * <p>
+ * To generate the default language file call the <code>BaseTranslation.save</code>
+ * method with an instance of the translation class as the only parameter.
+ * <pre>
+ *     class Translation extends BaseTranslation
+ *     {
+ *         ...
+ *         BaseTranslation.save(Translation.class);
+ *     }
+ * </pre>
+ * this will generate the file <code>lang/Translation.en</code>. To provide
+ * alternate languages translate the text in the generated translation file and
+ * change the extension to the two letter ISO language code. Languages can also
+ * be specified with the two letter ISO country code. For example, to provide
+ * translations in German and Swiss German the translation files should be
+ * <ul>
+ * <li>Translation.de
+ * <li>Translation.de-ch
+ * </ul>
+ * <b>Note:</b> The name of the translation file is the same as the name of 
+ * the class that extends <code>BaseTranslation</code>.
+ * <p>
+ * <b>Example</b>
  * 
  * <pre>
  *  public class Translation extends BaseTranslation
  *  {
- *    public String HelloWorld = &quot;Hello World&quot;;
- *    public String SomeText = &quot;Some text&quot;;
+ *    @Default("Hello world.")
+ *    public final String HelloWorld = null;
+ *    @Default("Some text.");
+ *    public final String SomeText = null;
  *    ...
  *    
  *    public Translation()
  *    {
- *    	super(Translation.class);
+ *       super();
+ *       super.init(Translation.class);
  *    }
  *  }
  * 
@@ -65,9 +105,6 @@ import java.util.ResourceBundle;
  *  }
  * </pre>
  * <p>
- * Subclass of BaseTranslation can call one of the <code>init</code> methods to
- * load an arbitrary language file if needed.
- * <p>
  * The advantage of using the BaseTranslation class over a standard Java
  * {@link ResourceBundle} is that since the messages are fields of the class
  * IDEs such as Eclipse or NetBeans are able to provide code completion, type
@@ -78,11 +115,9 @@ import java.util.ResourceBundle;
  * <pre>
  *  String message = myResourceBundle.getString(&quot;Hello World&quot;)
  * </pre>
- * 
  * However, there is nothing the compiler, or an IDE, can do ensure there are no
  * typos in the key value is being used. The keys used could be specified as
  * constant (final static) values of a class:
- * 
  * <pre>
  * public final class Keys 
  * {
@@ -91,12 +126,9 @@ import java.util.ResourceBundle;
  * ...
  * String message = myResourceBundle.getString(Keys.HelloWorld);
  * </pre>
- * 
  * But that add another class to maintain and another set of values that need to
  * be kept synchronized.
- * 
  * <p>
- * 
  * @author Keith Suderman
  * @since Version 2.0.0
  * 

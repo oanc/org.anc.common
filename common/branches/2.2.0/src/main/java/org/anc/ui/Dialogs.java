@@ -135,8 +135,8 @@ public class Dialogs
       JPanel panel = new JPanel();
       panel.setLayout(new GridBagLayout());
       GBC gbc = new GBC();
-      gbc.anchorLeft();
-      
+//      gbc.anchorLeft();
+      gbc.anchorNorthwest();
       JTextPane txtPn = new JTextPane();
       txtPn.setLayout(new GridBagLayout());
       txtPn.setText("CAUSE: " + ex.getMessage());

@@ -38,6 +38,7 @@ import java.util.StringTokenizer;
  * 
  * @author Keith Suderman
  * @version 1.0
+ * @since 2.2.0
  */
 public class Parameters
 {

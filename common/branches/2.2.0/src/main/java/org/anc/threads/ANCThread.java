@@ -37,13 +37,13 @@ public abstract class ANCThread extends Thread implements Haltable
    public enum State
    {
       STOPPED, RUNNING, PAUSED, HALTED, TERMINATED
-   };
+   }
 
    /** Events sent to listeners. */
    public enum Event
    {
       STOPPED, STARTED, PAUSED, RESUMED, HALTED, TERMINATED
-   };
+   }
 
    /** Current state of the thread. */
    private State state = State.STOPPED;
