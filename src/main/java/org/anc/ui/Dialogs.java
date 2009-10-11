@@ -137,24 +137,22 @@ public class Dialogs
       GBC gbc = new GBC();
 //      gbc.anchorLeft();
       gbc.anchorNorthwest();
-      JTextPane txtPn = new JTextPane();
-      txtPn.setLayout(new GridBagLayout());
-      txtPn.setText("CAUSE: " + ex.getMessage());
-      txtPn.setForeground(Color.RED);
-      txtPn.setBackground(panel.getBackground());
+      
+      JTextPane pane = new JTextPane();
+      pane.setLayout(new GridBagLayout());
+      pane.setBackground(panel.getBackground());
       //setEditable used so users cannot delete the message accidentally
-      txtPn.setEditable(false);
-      panel.add(txtPn, gbc);
+      pane.setEditable(false);
 
+      //obtain the error string
       String s = new String();
       for (int i = 0; i < trace.length; ++i)
-      {  s += ("     " + trace[i].toString()) + "\n";
+      {  
+    	  s += ("     " + trace[i].toString()) + "\n";
       }
-      JTextPane msgPn = new JTextPane();
-      msgPn.setText(s);
-      msgPn.setBackground(panel.getBackground());
-      msgPn.setEditable(false);
-      panel.add(msgPn, gbc.down());
+      
+      pane.setText("CAUSE: " + ex.getMessage() + "\n\n" + s);
+      panel.add(pane, gbc.down());
       
       JScrollPane scroll = new JScrollPane(panel);
       scroll.setPreferredSize(new Dimension(400, 250));
