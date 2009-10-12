@@ -172,19 +172,19 @@ public class Parameters
          out = new PrintStream(os);
       }
       printErrors(out, "Errors", errors);
-      printErrors(out, "Missing", missing);
-      printErrors(out, "Invalid", invalid);
-      printErrors(out, "Unknown", unknown);
+      printErrors(out, "Missing parameters", missing);
+      printErrors(out, "Invalid parameters", invalid);
+      printErrors(out, "Unknown parameters", unknown);
    }
 
-   public void printErrors(PrintStream out, String title, List<String> errors)
+   public void printErrors(PrintStream out, String title, List<String> messages)
    {
-      if (errors.size() == 0)
+      if (messages.size() == 0)
       {
          return;
       }
       out.println(title);
-      for (String error : errors)
+      for (String error : messages)
       {
          out.println("   " + error);
       }
