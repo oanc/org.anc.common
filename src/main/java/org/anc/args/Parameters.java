@@ -21,8 +21,8 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,23 +31,72 @@ import java.util.StringTokenizer;
 
 
 /**
- * A simple class to parse command line arguments and store them in a map as
- * name/value pairs. The command line arguments should be of the form
- * <tt>-name=value</tt>, or in the case of a switch type argument, simply
- * <tt>-name</tt>.
+ * Parses a command line (array of strings from <code>main(String[] args)</code>)
+ * and makes the values available through several <code>get</code> methods. The
+ * Parameters class can also generate a usage message if given enough details
+ * about the valid command line parameters. Information about the correct 
+ * command line can be specified by:
+ * <ul>
+ * <li>passing a constructor an array of {@link Parameter} objects that must
+ * appear on the command line.
+ * <li>an instance of a Class&lt;? extends IParameters> object that will be 
+ * examined to determine the list of all valid parametes.
+ * </ul>
+ * <p>
+ * <b>EXAMPLE</b>
+ * <pre>
+ * public class MyClass
+ * {
+ *    public static final class Params implements IParamters
+ *    {
+ *       public static final Parameter IN = Parameter.path("-in", "input file.");
+ *       public static final Parameter TEXT = Parameter.string("-text", "some text");
+ *       public static final Parameter DEBUG = Parameter.flag("-debug", "enable debugging"); 
+ *    }
+ *    
+ *    protected final Parameter[] REQUIRED = { Params.IN, Params.TEXT };
+ *    
+ *    public static void main(String[] args)
+ *    {
+ *       Parameters parameters = new Parameters(args, REQUIRED, Params.class);
+ *       if (!parameters.valid())
+ *       {
+ *          parameters.printErrors();
+ *          return;
+ *       }
+ *       
+ *       boolean debugModeEnabled = parameters.defined(Params.DEBUG);
+ *       File input = new File(parameters.get(Params.IN));
+ *       ...
+ *    }
+ * }
  * 
+ * </pre>
  * @author Keith Suderman
  * @version 1.0
  * @since 2.2.0
  */
 public class Parameters
 {
-   protected Map<String, String> args = new Hashtable<String, String>();
+   /** Map the command line parameters to the value that was provided. */
+   protected Map<String, String> args = new HashMap<String, String>();
+   /** Errors encountered when parsing the command line parameter. */
    protected List<String> errors = new LinkedList<String>();
-   protected Set<String> allArgs = null;
+   /** A list of parameters that are required but were not provided. */
    protected List<String> missing = new LinkedList<String>();
+   /** A list of parameters that were provided but in the wrong format. */
    protected List<String> invalid = new LinkedList<String>();
+   /** A list of unrecognized parameters that were given on the command line.
+    *  This list will only be populated if one of the constructors that accepts
+    *  a Class&lt;? extends IParameters> is used.
+    */
    protected List<String> unknown = new LinkedList<String>();
+   /**
+    * The set of all recognized parameters. This list will only be populated if
+    * one of the constructors that accepts a Class&lt;? extends IParameters> is
+    * used.
+    */
+   protected Set<String> allArgs = null;
    
    public Parameters(String[] args)
    {
@@ -74,7 +123,8 @@ public class Parameters
          Class<? extends IParameters> parametersClass)
    {
       this(args, parametersClass);
-      checkRequired(required);
+      checkRequired(required);;
+      checkChoices(parametersClass);
    }
 
    public Parameters(String[] args, Class<? extends IParameters> parametersClass)
@@ -383,7 +433,6 @@ public class Parameters
       }
    }
 
-   @SuppressWarnings("unused")
    private void checkChoices(Class<?> parameterClass)
    {
       Field[] fields = parameterClass.getFields();

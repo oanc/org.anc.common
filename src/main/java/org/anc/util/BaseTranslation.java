@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
  * <p>
  * The <code>public final String</code> fields should be initialized to 
  * <code>null</code> and the default value to use specified with a
- * {@link #Default} annotation on the field. 
+ * <code>@Default</code> annotation on the field. 
  * <p>
  * Derived classes <i>must</i> call the <code>BaseTranslation.init</code> 
  * method in the constructor to initialize the <code>public final String</code>
