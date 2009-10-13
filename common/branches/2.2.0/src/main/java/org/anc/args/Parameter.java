@@ -3,7 +3,27 @@ package org.anc.args;
 import java.util.*;
 
 /**
+ * Parameter objects are used to encapsulate information about command line
+ * parameters is CLI/shell programs. Each parameter consists of:
+ * <ul>
+ * <li>the command line argument used to specify the parameter, ie. -some-flag.
+ * <li>a description of the parameter used when printing a usage message.
+ * <li>a type, which can be one of string, path, list, flag, or choice.
+ * <li>a method to display the proper usage of the parameter on the command line.
+ * </ul>
+ * Choice parameters also maintain a list of the valid values that can be 
+ * specified. The <i>type</i> of the parameter only determines how the usage message will
+ * be displayed. No real type checking is done.
+ * <p>
+ * Parameters can be constructed directly and optionally supply a value for the
+ * type parameter, or use one of the factory methods to create a parameter of
+ * the desired type. For example, the following two parameters are equivalent.
+ * <pre>
+ * Parameter p1 = new Parameter("-x", "a flag", Parameter.FLAG);
+ * Parameter p2 = Parameter.flag("-x", "a flag");
+ * </pre>
  * 
+ * @see org.anc.args.Parameters Parameters for usage examples. 
  * @author Keith Suderman
  * @since 2.2.0
  */
@@ -130,7 +150,7 @@ public class Parameter
    {
       if (validChoices == null)
       {
-         return false;
+         return true;
       }
       return validChoices.contains(choice);
    }
