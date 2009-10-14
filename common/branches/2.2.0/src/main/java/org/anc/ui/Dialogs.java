@@ -144,13 +144,15 @@ public class Dialogs
       pane.setEditable(false);
 
       //obtain the error string
-      String s = new String();
+//      String s = new String();
+      StringBuilder builder = new StringBuilder();
       for (int i = 0; i < trace.length; ++i)
       {  
-    	  s += ("     " + trace[i].toString()) + "\n";
+//    	  s += ("     " + trace[i].toString()) + "\n";
+         builder.append("     " + trace[i].toString() + "\n");
       }
       
-      pane.setText("CAUSE: " + ex.getMessage() + "\n\n" + s);
+      pane.setText("CAUSE: " + ex.getMessage() + "\n\n" + builder.toString());
       panel.add(pane, gbc.down());
       
       JScrollPane scroll = new JScrollPane(panel);
