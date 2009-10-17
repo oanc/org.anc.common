@@ -61,7 +61,7 @@ import java.util.StringTokenizer;
  *       Parameters parameters = new Parameters(args, REQUIRED, Params.class);
  *       if (!parameters.valid())
  *       {
- *          parameters.printErrors();
+ *          parameters.usage(MyClass.class, REQUIRED, Params.class);
  *          return;
  *       }
  *       
@@ -227,19 +227,19 @@ public class Parameters
       printErrors(out, "Unknown parameters", unknown);
    }
 
-   public void printErrors(PrintStream out, String title, List<String> messages)
+   private void printErrors(PrintStream out, String title, List<String> messages)
    {
       if (messages.size() == 0)
       {
          return;
       }
       out.println(title);
-      for (String error : messages)
+      for (String message : messages)
       {
-         out.println("   " + error);
+         out.println("   " + message);
       }
    }
-   
+
    /** 
     * Display a usage message for the parameters in parameterClass. It is 
     * recommended that people use the three argument version of this method
@@ -428,7 +428,7 @@ public class Parameters
       {
          if (!defined(p.name()))
          {
-            missing.add(p.name());
+            missing.add(p.usage());
          }
       }
    }
