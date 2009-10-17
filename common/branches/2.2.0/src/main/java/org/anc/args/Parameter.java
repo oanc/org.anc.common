@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Parameter objects are used to encapsulate information about command line
- * parameters is CLI/shell programs. Each parameter consists of:
+ * parameters in CLI/shell programs. Each parameter consists of:
  * <ul>
  * <li>the command line argument used to specify the parameter, ie. -some-flag.
  * <li>a description of the parameter used when printing a usage message.

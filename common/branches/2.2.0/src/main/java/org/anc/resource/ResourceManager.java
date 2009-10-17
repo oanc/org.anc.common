@@ -26,7 +26,9 @@ import java.util.*;
  * runtime exceptions.
  * <li>{@link #closeAbruptly()} : ignores all exceptions.
  * </ol>
- * All of the <code>close*()</code> methods
+ * All of the <code>close*()</code> methods catch any exceptions thrown and
+ * only propagate the exceptions after all resources have had their
+ * <code>close()</code> methods called. 
  * <p>
  * <b>EXAMPLE</b>
  * 
@@ -36,7 +38,7 @@ import java.util.*;
  * {
  *    InputStream istream = manager.add(new FileInputStream(...));
  *    OutputStream ostream = manager.add(new FileOutputStream(...));
- *    Closeable dbConnection = manager.add(openDatabaseConnect());
+ *    Closeable dbConnection = manager.add(openDatabaseConnection());
  *    ...
  * }
  * finally
