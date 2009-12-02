@@ -24,7 +24,16 @@ package org.anc;
 public class Sys
 {
    public static final String EOL = System.getProperty("line.separator");
-   public static final String FILE_SEP = System.getProperty("file.separator");
+//   public static final String FILE_SEP = System.getProperty("file.separator");
+   
+   /** Operating system dependant file separator. */
+   public static final String OS_FILE_SEP = System.getProperty("file.separator");
+   /** The Java file separator.  This should be used 99% of the time (even
+     * on Windows). The only time to use the OS_FILE_SEP is if an application
+     * has to write an external file/script that will be processed natively
+     * by the OS (rather than by another Java application).
+     */ 
+   public static final String FILE_SEP = "/";
 
    private Sys()
    {
