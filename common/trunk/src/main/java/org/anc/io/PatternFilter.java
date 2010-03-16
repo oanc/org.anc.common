@@ -42,9 +42,12 @@ public class PatternFilter implements FileFilter
 
    public PatternFilter(String regex, boolean listDirectories)
    {
-      regex = regex.replaceAll("\\.", "\\\\.");
-      regex = regex.replaceAll("\\*", ".*");
-      pattern = Pattern.compile(regex);
+      if (regex != null)
+      {
+         regex = regex.replaceAll("\\.", "\\\\.");
+         regex = regex.replaceAll("\\*", ".*");
+         pattern = Pattern.compile(regex);
+      }
       this.listDirectories = listDirectories;
    }
 
@@ -60,8 +63,8 @@ public class PatternFilter implements FileFilter
       }
 
       String filename = file.getName();
-      CharSequence s = filename.subSequence(0, filename.length());
-      Matcher matcher = pattern.matcher(s);
+//      CharSequence s = filename.subSequence(0, filename.length());
+      Matcher matcher = pattern.matcher(filename);
       return matcher.matches();
    }
 
