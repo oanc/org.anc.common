@@ -14,39 +14,89 @@
  * limitations under the License.
  *
  */
-package org.anc.util;
+package org.anc.args;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+
 /**
- * A simple class to parse command line arguments and store them in a map as
- * name/value pairs. The command line arguments should be of the form
- * <tt>-name=value</tt>, or in the case of a switch type argument, simply
- * <tt>-name</tt>.
+ * Parses a command line (array of strings from <code>main(String[] args)</code>)
+ * and makes the values available through several <code>get</code> methods. The
+ * Parameters class can also generate a usage message if given enough details
+ * about the valid command line parameters. Information about the correct 
+ * command line can be specified by:
+ * <ul>
+ * <li>passing a constructor an array of {@link Parameter} objects that must
+ * appear on the command line.
+ * <li>an instance of a Class&lt;? extends IParameters> object that will be 
+ * examined to determine the list of all valid parametes.
+ * </ul>
+ * <p>
+ * <b>EXAMPLE</b>
+ * <pre>
+ * public class MyClass
+ * {
+ *    public static final class Params implements IParamters
+ *    {
+ *       public static final Parameter IN = Parameter.path("-in", "input file.");
+ *       public static final Parameter TEXT = Parameter.string("-text", "some text");
+ *       public static final Parameter DEBUG = Parameter.flag("-debug", "enable debugging"); 
+ *    }
+ *    
+ *    protected final Parameter[] REQUIRED = { Params.IN, Params.TEXT };
+ *    
+ *    public static void main(String[] args)
+ *    {
+ *       Parameters parameters = new Parameters(args, REQUIRED, Params.class);
+ *       if (!parameters.valid())
+ *       {
+ *          parameters.usage(MyClass.class, REQUIRED, Params.class);
+ *          return;
+ *       }
+ *       
+ *       boolean debugModeEnabled = parameters.defined(Params.DEBUG);
+ *       File input = new File(parameters.get(Params.IN));
+ *       ...
+ *    }
+ * }
  * 
+ * </pre>
  * @author Keith Suderman
  * @version 1.0
+ * @since 2.2.0
  */
 public class Parameters
 {
-   protected Map<String, String> args = new Hashtable<String, String>();
+   /** Map the command line parameters to the value that was provided. */
+   protected Map<String, String> args = new HashMap<String, String>();
+   /** Errors encountered when parsing the command line parameter. */
    protected List<String> errors = new LinkedList<String>();
-   protected Set<String> allArgs = null;
+   /** A list of parameters that are required but were not provided. */
    protected List<String> missing = new LinkedList<String>();
+   /** A list of parameters that were provided but in the wrong format. */
    protected List<String> invalid = new LinkedList<String>();
+   /** A list of unrecognized parameters that were given on the command line.
+    *  This list will only be populated if one of the constructors that accepts
+    *  a Class&lt;? extends IParameters> is used.
+    */
    protected List<String> unknown = new LinkedList<String>();
+   /**
+    * The set of all recognized parameters. This list will only be populated if
+    * one of the constructors that accepts a Class&lt;? extends IParameters> is
+    * used.
+    */
+   protected Set<String> allArgs = null;
    
    public Parameters(String[] args)
    {
@@ -70,19 +120,20 @@ public class Parameters
 //    }
 
    public Parameters(String[] args, Parameter[] required,
-         Class<? extends Object> parametersClass)
+         Class<? extends IParameters> parametersClass)
    {
       this(args, parametersClass);
-      checkRequired(required);
+      checkRequired(required);;
+      checkChoices(parametersClass);
    }
 
-   public Parameters(String[] args, Class<? extends Object> parametersClass)
+   public Parameters(String[] args, Class<? extends IParameters> parametersClass)
    {      
       super();
-      if (parametersClass == Parameters.class)
-      {
-         throw new RuntimeException("You have passed the wrong parameter class to the Parameters constructor.  Check the class name.");
-      }
+//      if (parametersClass == Parameters.class)
+//      {
+//         throw new RuntimeException("You have passed the wrong parameter class to the Parameters constructor.  Check the class name.");
+//      }
       try
       {
          getParameterFields(parametersClass);
@@ -171,25 +222,30 @@ public class Parameters
          out = new PrintStream(os);
       }
       printErrors(out, "Errors", errors);
-      printErrors(out, "Missing", missing);
-      printErrors(out, "Invalid", invalid);
-      printErrors(out, "Unknown", unknown);
+      printErrors(out, "Missing parameters", missing);
+      printErrors(out, "Invalid parameters", invalid);
+      printErrors(out, "Unknown parameters", unknown);
    }
 
-   public void printErrors(PrintStream out, String title, List<String> errors)
+   private void printErrors(PrintStream out, String title, List<String> messages)
    {
-      if (errors.size() == 0)
+      if (messages.size() == 0)
       {
          return;
       }
       out.println(title);
-      for (String error : errors)
+      for (String message : messages)
       {
-         out.println("   " + error);
+         out.println("   " + message);
       }
    }
-   
-   public static void usage(Class<?> parameterClass) 
+
+   /** 
+    * Display a usage message for the parameters in parameterClass. It is 
+    * recommended that people use the three argument version of this method
+    * since it returns a more complete usage message.
+    */
+   public static void usage(Class<? extends IParameters> parameterClass) 
    {
       // First collect all the parameters and measure the length of the command
       // name.  We need to know the length of the longest command so we can 
@@ -203,8 +259,6 @@ public class Parameters
          if (Modifier.isStatic(m) && Modifier.isFinal(m)
                && field.getType() == Parameter.class)
          {
-//            String paramName = field.get(null).toString();
-//            allArgs.add(paramName);
             Parameter p = null;
             try
             {
@@ -215,7 +269,6 @@ public class Parameters
                {
                   longest = name.length();
                }
-//               System.out.println("\t" + p.usage());
             }
             catch (IllegalArgumentException e)
             {
@@ -236,7 +289,7 @@ public class Parameters
       }
    }
    
-   public static void usage(Class<?> applicationClass, Class<?> paramsClass, Parameter[] required)
+   public static void usage(Class<?> applicationClass, Class<? extends IParameters> paramsClass, Parameter[] required)
    {
       Set<Parameter> req = new HashSet<Parameter>();
       for (Parameter p : required)
@@ -244,12 +297,15 @@ public class Parameters
          req.add(p);
       }
    
-      // Determine if the user launched the class file or a jar file.
+      // Determine if the user launched the program from a class file or a 
+      // jar file.
       String appName = applicationClass.getName();   
       String className = appName.replace('.', '/');
       String classJar = applicationClass.getResource(
          "/" + className + ".class").toString();
 
+      // If the class was launched from a jar file the URL returned by 
+      // getResource will start with "jar:"
       if (classJar.startsWith("jar:")) 
       {
          appName = "-jar " + getJarName(classJar);
@@ -269,11 +325,11 @@ public class Parameters
       for (Field field : fields)
       {
          int m = field.getModifiers();
+         //TODO we should warn if any Parameter.class fields are found that
+         // are not static and final.
          if (Modifier.isStatic(m) && Modifier.isFinal(m)
                && field.getType() == Parameter.class)
          {
-//            String paramName = field.get(null).toString();
-//            allArgs.add(paramName);
             Parameter p = null;
             try
             {
@@ -334,12 +390,12 @@ public class Parameters
    {
       if (!arg.startsWith("-"))
       {
-//         errors.add("Invalid argument " + arg
-//               + ". Arguments must start with a '-' (dash).");
          invalid.add(arg);
          return;
       }
 
+      // If the arg contains an assignment operator split it into a name/value
+      // pair.  Otherwise the arg is a flag to be set.
       String name = null;
       int equal = arg.indexOf('=');
       if (equal < 0)
@@ -349,41 +405,73 @@ public class Parameters
       }
       else
       {
-//       String[] parts = arg.split("=");
-//       if (parts == null || parts.length != 2)
-//       {
-//          errors.add("Invalid argument form: " + arg + ". Arguments must be of the form -name=value.");
-//          return;
-//       }
-//       args.put(parts[0], parts[1]);
-//       name = parts[0];
          name = arg.substring(0, equal).trim();
          String value = arg.substring(equal + 1).trim();
          args.put(name, value);
       }
+
+      // Check if arg is one of permitted arguments.
       if (allArgs != null)
       {
          if (!allArgs.contains(name))
          {
-//            errors.add("Unknown parameter " + name);
             unknown.add(name);
             return;
          }
       }
    }
 
+   // Checks that all required arguments have been defined.
    private void checkRequired(Parameter[] required)
    {
       for (Parameter p : required)
       {
          if (!defined(p.name()))
          {
-            missing.add(p.name());
-//            errors.add("Required argument " + p.name() + " is missing.");
+            missing.add(p.usage());
          }
       }
    }
 
+   private void checkChoices(Class<?> parameterClass)
+   {
+      Field[] fields = parameterClass.getFields();
+      for (Field field : fields)
+      {
+         int m = field.getModifiers();
+         if (Modifier.isStatic(m) && Modifier.isFinal(m)
+               && field.getType() == Parameter.class)
+         {
+            Parameter p;
+            try
+            {
+               p = (Parameter) field.get(null);
+               String name = p.name();
+               String choice = args.get(name);
+               if (choice != null && !p.valid(choice))
+               {
+                  invalid.add("Invalid argument for paramter " + name + " : " 
+                        + choice);
+               }
+            }
+            catch (IllegalArgumentException e)
+            {
+               invalid.add("Invalid choice paramter");
+               e.printStackTrace();
+            }
+            catch (IllegalAccessException e)
+            {
+               invalid.add("Invalid choice paramter");
+               e.printStackTrace();
+            }
+         }
+      }
+   }
+   
+   /** 
+    * Initializes the allArgs set with the names of all static final Parameter
+    * fields in the class <code>parameterClass</code>. 
+    */
    private void getParameterFields(Class<?> parameterClass)
          throws IllegalArgumentException, IllegalAccessException
    {

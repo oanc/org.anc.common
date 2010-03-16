@@ -47,10 +47,34 @@ public class BaseTranslationTest
       System.out.println(msg);
    }
 
+   @Test
+   public final void testTranslation()
+   {
+      Translation t = new Translation();
+      System.out.println(t.MSG1);
+      System.out.println(t.MSG2);
+   }
+
    public static void main(String[] args)
    {
-      BaseTranslationTest test = new BaseTranslationTest();
-      test.testCompleteStringString();
-      test.testCompleteStringStringString();
+//      BaseTranslationTest test = new BaseTranslationTest();
+//      test.testCompleteStringString();
+//      test.testCompleteStringStringString();
+      Translation t = new Translation();
+      t.write(System.out, "Test");
+   }
+}
+
+class Translation extends BaseTranslation
+{
+   @Default("This is the first message.")
+   public final String MSG1 = null;
+   @Default("This is the second message.")
+   public final String MSG2 = null;
+   
+   public Translation()
+   {
+      super();
+      super.init(Translation.class);
    }
 }

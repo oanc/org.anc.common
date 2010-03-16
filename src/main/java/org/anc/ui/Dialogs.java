@@ -16,7 +16,6 @@
  */
 package org.anc.ui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -26,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 
 /**
@@ -133,17 +133,28 @@ public class Dialogs
       StackTraceElement[] trace = ex.getStackTrace();
       JPanel panel = new JPanel();
       panel.setLayout(new GridBagLayout());
-      JLabel label = new JLabel("CAUSE: " + ex.getMessage());
-      label.setForeground(Color.RED);
       GBC gbc = new GBC();
-      gbc.anchorLeft();
-//    gbc.insets(1, 5, 2, 10);
-      panel.add(label, gbc);
-//    gbc.insets(1, 15, 2, 10);
+//      gbc.anchorLeft();
+      gbc.anchorNorthwest();
+      
+      JTextPane pane = new JTextPane();
+      pane.setLayout(new GridBagLayout());
+      pane.setBackground(panel.getBackground());
+      //setEditable used so users cannot delete the message accidentally
+      pane.setEditable(false);
+
+      //obtain the error string
+//      String s = new String();
+      StringBuilder builder = new StringBuilder();
       for (int i = 0; i < trace.length; ++i)
-      {
-         panel.add(new JLabel("     " + trace[i].toString()), gbc.down());
+      {  
+//    	  s += ("     " + trace[i].toString()) + "\n";
+         builder.append("     " + trace[i].toString() + "\n");
       }
+      
+      pane.setText("CAUSE: " + ex.getMessage() + "\n\n" + builder.toString());
+      panel.add(pane, gbc.down());
+      
       JScrollPane scroll = new JScrollPane(panel);
       scroll.setPreferredSize(new Dimension(400, 250));
       errorBox(parent, scroll, title);
