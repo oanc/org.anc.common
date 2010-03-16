@@ -72,7 +72,7 @@
 								anc-dev-snapshot
 							</repositoryId>
 							<url>
-								dav:http://www.americannationalcorpus.org/maven/snapshot
+								dav:http://www.anc.org/maven/snapshot
 							</url>
 							<pomFile>${basedir}/pom.xml</pomFile>
 						</configuration>
@@ -122,7 +122,7 @@
 			<id>anc-dev-release</id>
 			<name>ANC Replease Repository</name>
 			<url>
-				dav:http://www.americannationalcorpus.org/maven/release
+				dav:http://www.anc.org/maven/release
 			</url>
 		</repository>
 		<!-- use the following if you ARE using a snapshot version. -->
@@ -131,7 +131,7 @@
 			<id>anc-dev-snapshot</id>
 			<name>ANC Snapshot Repository</name>
 			<url>
-				dav:http://www.americannationalcorpus.org/maven/snapshot
+				dav:http://www.anc.org/maven/snapshot
 			</url>
 		</snapshotRepository>
 		 <!-- -->
