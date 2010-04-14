@@ -2,6 +2,8 @@ package org.anc.masc;
 
 public final class MASC
 {
+   public static final String NAMESPACE = "http://www.anc.org/ns/masc/1.0";
+   
    public final class AnnotationSets
    {
       public final class XCES
