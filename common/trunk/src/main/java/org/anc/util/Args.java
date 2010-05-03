@@ -35,7 +35,9 @@ import java.util.Set;
  * 
  * @author Keith Suderman
  * @version 1.0
+ * @deprecated Use the org.anc.args.* classes instead.
  */
+@Deprecated
 public class Args
 {
    protected Map<String, String> args = new Hashtable<String, String>();
