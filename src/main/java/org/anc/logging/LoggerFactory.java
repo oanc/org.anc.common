@@ -60,6 +60,8 @@ public class LoggerFactory
    
    public void setFilename(String path, boolean append)
    {
+      this.filename = path;
+      this.append = append;
    }
    
    public Logger getLogger(Class<?> theClass)
