@@ -29,13 +29,18 @@ import org.anc.Sys;
 import org.anc.util.Pair;
 
 /**
- * n Provides access to the operating system environmental variables. The
+ * Provides access to the operating system environmental variables. The
  * environmental variables are read-only since Java provides no mechanism for
  * manipulating environmental variables.
  * 
+ * NOTE: 
+ * 
  * @author Keith Suderman
  * @version 1.0
+ * @deprecated This class is now obsolete with the introduction (finally) of
+ * System.getenv.
  */
+@Deprecated
 public class Environment
 {
    /**
