@@ -6,6 +6,11 @@ public final class MASC
    
    public final class AnnotationSets
    {
+      public final class ANC
+      {
+         public static final String NAME = "masc";
+         public static final String TYPE = MASC.NAMESPACE;         
+      }
       public final class XCES
       {
          public static final String NAME = "xces";
