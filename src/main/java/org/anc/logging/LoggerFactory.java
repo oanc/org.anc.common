@@ -48,6 +48,11 @@ public class LoggerFactory
       this.append = append;
    }
    
+   public void setLevel(String level)
+   {
+      this.level = Level.toLevel(level);
+   }
+   
    public void setLevel(Level level)
    {
       this.level = level;
