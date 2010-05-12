@@ -31,5 +31,10 @@ public final class MASC
          public static final String NAME = "WordNet";
          public static final String TYPE = "http://wordnet.princeton.edu/";
       }
+      public final class MPQA
+      {
+         public static final String NAME = "mpqa";
+         public static final String TYPE = "http://www.cs.pitt.edu/mpqa/";
+      }
    }
 }

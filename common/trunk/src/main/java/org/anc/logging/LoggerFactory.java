@@ -95,6 +95,7 @@ public class LoggerFactory
          appender.setEncoder(encoder);
          appender.setFile(filename);
          appender.setName("FILE");
+         appender.start();
          qosLogger.addAppender(appender);
       }
       return logger;
