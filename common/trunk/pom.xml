@@ -8,6 +8,7 @@
 	<name>ANC Common Utilities</name>
 	<url>http://www.anc.org/</url>
 	<description>Common utility classes used in most ANC projects.</description>
+	<!-- Added a comment to test svn ci -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
