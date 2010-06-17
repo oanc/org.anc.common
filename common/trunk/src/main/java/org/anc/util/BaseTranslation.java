@@ -251,16 +251,22 @@ public class BaseTranslation
 
    protected void init(Class<? extends BaseTranslation> subclass)
    {
+//      System.out.println("BaseTranslation Initializing.");
       String className = getClassName(subclass);
       Properties translation = new Properties();
       // First check if the system property has been set manually.  This will
       // override all other methods of determining the language file to use.
+      Locale locale = Locale.getDefault();
       String lang = System.getProperty(SystemProperties.LANG);
+//      if (lang == null)
+//      {
+//         lang = locale.getLanguage();
+//      }
       if (!loadLanguage(lang, className, translation))
       {
+//         System.out.println("Attempting to load " + lang);
          // That didn't work, so check for a language file specified by country
          // and language code.
-         Locale locale = Locale.getDefault();
          String country = locale.getCountry();
          lang = locale.getLanguage();
          if (!loadLanguage(lang + "-" + country, className, translation))
@@ -271,9 +277,11 @@ public class BaseTranslation
          }
       }
             
+//      System.out.println("Setting fields.");
       Field[] fields = subclass.getDeclaredFields();
       for (Field field : fields)
       {
+//         System.out.println("Setting " + field.getName());
          int modifiers = field.getModifiers();
 //         String fieldClass = field.getType().getName();
 //         String access = Modifier.isPublic(modifiers) ? "public " : "";
@@ -298,6 +306,7 @@ public class BaseTranslation
             }
             try
             {
+//               System.out.println("Setting " + field.getName() + " to \"" + value + "\"");
                field.set(this, value);
             }
             catch (IllegalArgumentException e)
