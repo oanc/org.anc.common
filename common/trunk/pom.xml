@@ -39,7 +39,7 @@
 	</developers>
 	<scm>
 		<connection>scm:svn:http://www.anc.org/svn/common</connection>
-		<developerConnection>scm:svn:http://www.anc.org/svn/common</developerConnection>
+		<developerConnection>scm:svn:https://www.anc.org/svn/common</developerConnection>
 		<url>https://www.anc.org/svn/common</url>
 	</scm>
 	<organization>
