@@ -14,7 +14,7 @@
 	</properties>
 	<issueManagement>
 		<system>Trac</system>
-		<url>https://www.anc.org/wiki</url>
+		<url>http://www.anc.org/wiki</url>
 	</issueManagement>
 	<licenses>
 		<license>
@@ -41,7 +41,7 @@
 	<scm>
 		<connection>scm:svn:http://www.anc.org/svn/common</connection>
 		<developerConnection>scm:svn:https://www.anc.org/svn/common</developerConnection>
-		<url>https://www.anc.org/svn/common</url>
+		<url>http://www.anc.org/svn/common</url>
 	</scm>
 	<organization>
 		<name>The American National Corpus</name>
