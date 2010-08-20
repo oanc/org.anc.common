@@ -19,7 +19,7 @@ import java.util.*;
  * be available with
  * {@link ResourceManagerRuntimeException#getCheckedExceptions()}.
  * <p>
- * Their are three flavors of the close method:
+ * There are three flavors of the close method:
  * <ol>
  * <li>{@link #close()} : will re-throw runtime and checked exceptions.
  * <li>{@link #closeQuiety()} : will discard any checked exceptions and re-throw
@@ -132,7 +132,7 @@ public class ResourceManager<T extends Closeable>
     *  are ignored and runtime exceptions are propagated only after all 
     *  resources have been closed.
     */
-   public void closeQuiety()
+   public void closeQuietly()
    {
       ResourceManagerRuntimeException exception = null;
       for (T resource : resources)

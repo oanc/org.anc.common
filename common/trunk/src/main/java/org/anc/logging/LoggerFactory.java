@@ -77,6 +77,11 @@ public class LoggerFactory
    public Logger getLogger(String name)
    {
       Logger logger = context.getLogger(name);
+      if (! (logger instanceof ch.qos.logback.classic.Logger))
+      {
+         return logger;
+      }
+      
       ch.qos.logback.classic.Logger qosLogger = (ch.qos.logback.classic.Logger) logger;
       if (level != null)
       {
