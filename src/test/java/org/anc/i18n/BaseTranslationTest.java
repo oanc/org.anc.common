@@ -14,37 +14,43 @@
  * limitations under the License.
  *
  */
-package org.anc.util;
+package org.anc.i18n;
 
+import static org.junit.Assert.*;
+
+import org.anc.i18n.BaseTranslation;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class BaseTranslationTest
 {
 
    @Test
    public final void testCompleteStringString()
    {
-      String template = "This is a file: $1";
-      String file = "C:/temp/round-4";
-      String msg = BaseTranslation.complete(template, file);
-      System.out.println(msg);
+      String expected1 = "A B";
+      String expected2 = "B and B";
+         
+      String template = "A $1";
+      String B = "B";
+      String msg = BaseTranslation.complete(template, B);
+      assertTrue(msg.equals(expected1));
 
       template = "$1 and $1";
-      msg = BaseTranslation.complete(template, file);
-      System.out.println(msg);
+      msg = BaseTranslation.complete(template, B);
+      assertTrue(msg.equals(expected2));
 
    }
 
    @Test
    public final void testCompleteStringStringString()
    {
-      String template = "this is one: $1 and this is two: $2";
-      String file1 = "C:/temp/round-4";
-      String file2 = "C:/temp/round-3";
-      String msg = BaseTranslation.complete(template, file1, file2);
-      System.out.println(msg);
+      String template = "A $1 $2";
+      String b = "B";
+      String c = "C";
+      String expected = "A B C";
+      String msg = BaseTranslation.complete(template, b, c);
+      assertTrue(msg.equals(expected));
    }
 
    @Test
@@ -62,10 +68,12 @@ public class BaseTranslationTest
 //      test.testCompleteStringStringString();
       Translation t = new Translation();
       t.write(System.out, "Test");
+//      BaseTranslation.write(Translation.class, System.out);
+//      BaseTranslation.write(Translation.class, System.out);
    }
 }
 
-class Translation extends BaseTranslation
+final class Translation extends BaseTranslation
 {
    @Default("This is the first message.")
    public final String MSG1 = null;
@@ -75,6 +83,6 @@ class Translation extends BaseTranslation
    public Translation()
    {
       super();
-      super.init(Translation.class);
+      init();
    }
 }

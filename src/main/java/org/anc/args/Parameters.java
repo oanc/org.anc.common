@@ -221,10 +221,10 @@ public class Parameters
       {
          out = new PrintStream(os);
       }
-      printErrors(out, "Errors", errors);
-      printErrors(out, "Missing parameters", missing);
-      printErrors(out, "Invalid parameters", invalid);
-      printErrors(out, "Unknown parameters", unknown);
+      printErrors(out, Messages.errors.ERRORS, errors);
+      printErrors(out, Messages.errors.MISSING, missing);
+      printErrors(out, Messages.errors.INVALID, invalid);
+      printErrors(out, Messages.errors.UNKNOWN, unknown);
    }
 
    private void printErrors(PrintStream out, String title, List<String> messages)
