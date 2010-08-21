@@ -61,6 +61,7 @@ import org.slf4j.*;
  * the fields to a Java properties file and can call the Google translate
  * web service to provide simple alternate translations.
  * <b>Example</b>
+ * <p>In Messages.java
  * <pre>
  *     package org.anc.example.i18n
  *     class Messages extends BaseTranslation
@@ -68,14 +69,13 @@ import org.slf4j.*;
  *         @Default("Hello world.")
  *         public final String HELLO_WORLD = null;
  *         
- *         public static final Messages instance = new Messages();
- *         
  *         public Messages()
  *         {
  *             init();
  *         }
  *     }
  * </pre>
+ * <p>In MyApp.java
  * <pre>
  *     package org.anc.example
  *     import org.anc.example.i18n.Messages;
@@ -107,9 +107,7 @@ import org.slf4j.*;
  * </ul>
  * <b>Note:</b> The name of the translation file is the same as the name of 
  * the class that extends <code>BaseTranslation</code>.
- * <p>
- *
- * <p>
+ * 
  * @author Keith Suderman
  * @since Version 2.0.0
  * 
@@ -229,7 +227,7 @@ public class BaseTranslation
          }
       }
       String className = BaseTranslation.getClassName(this.getClass());
-      File file = new File(directory, className + "." + lang); // $NON_NLS_1$
+      File file = new File(directory, className + "." + lang); // $NON-NLS-1$
       if (file.exists())
       {
          logger.info("Default language file already exists.");
@@ -254,12 +252,12 @@ public class BaseTranslation
    
    public void write(File file) throws IOException
    {
-      write(new FileOutputStream(file), "Default translation."); // $NON_NLS_1$ 
+      write(new FileOutputStream(file), "Default translation."); // $NON-NLS-1$ 
    }
 
    public void write(OutputStream out)
    {
-      write(out, "Default translation"); // $NON_NLS_1$      
+      write(out, "Default translation"); // $NON-NLS-1$      
    }
    
    public void write(OutputStream out, String comment)
@@ -304,6 +302,8 @@ public class BaseTranslation
    public void translate(OutputStream out, String lang)
    {
       String language = LocaleUtils.getLanguage(lang);
+      // TODO We should use Google translate to translate the following
+      // string!
       translate(out, lang, "Automatic translation for " + language);
    }
    
@@ -365,6 +365,7 @@ public class BaseTranslation
    {
       init(Locale.US);
    }
+   
    protected void init(Locale locale)
    {
       Class<? extends BaseTranslation> subclass = this.getClass();
@@ -513,7 +514,7 @@ public class BaseTranslation
       }
       
       File file = new File(DEFAULT_LANG_LOCATION + "/" 
-            + className + "." + lang);  // $NON_NLS_1$ // $NON_NLS_2$
+            + className + "." + lang);  // $NON-NLS-1$ // $NON-NLS-2$
       if (!file.exists())
       {
          return false;
