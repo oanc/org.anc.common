@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Locale;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,22 +43,23 @@ public class Translator
     * languages supported by Google Translate.
     * 
     * @param text The input text to be translated.
-    * @param lang a two letter ISO language code
+    * @param targetLang a two letter ISO language code
     * @return the translated string
     * @throws IOException
     * @throws JSONException
     */
-   public static String translate(String text, String lang) throws IOException, JSONException
+   public static String translate(String text, String sourceLang, String targetLang) throws IOException, JSONException
    {
       StringBuilder buffer = new StringBuilder();
       String query = TRANSLATOR + encode(text);
-      query = setLang(query, lang);
+      query = setLang(query, sourceLang, targetLang);
       URL url = new URL(query);
       InputStream is = url.openStream();
-      BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+      BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
       String line = reader.readLine();
       while (line != null)
       {
+         System.out.println(line);
          buffer.append(line);
          line = reader.readLine();         
       }
@@ -108,7 +110,7 @@ public class Translator
    
    /**
     * Appends the langpair query parameter to the end of the URL. It is assumed
-    * that the input language is always English.
+    * that the input language is US English.
     * 
     * @param url
     * @param lang
@@ -116,7 +118,15 @@ public class Translator
     */
    protected static String setLang(String url, String lang)
    {
-      return url + "&langpair=en%7C" + lang;
+//      return url + "&langpair=en%7C" + lang;
+      return setLang(url, Locale.US.getLanguage(), lang);
    }
 
+   /** Appends the langpair query to the end of the URL.
+    * 
+    */
+   protected static String setLang(String url, String sourceLang, String targetLang)
+   {
+      return url + "&langpair=" + sourceLang + "%7C" + targetLang;
+   }
 }

@@ -20,8 +20,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,6 +35,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import org.anc.io.UTF8Reader;
+import org.anc.io.UTF8Writer;
 import org.json.JSONException;
 import org.slf4j.*;
 
@@ -133,43 +139,77 @@ public class BaseTranslation
 
    protected static final Logger logger = LoggerFactory.getLogger(BaseTranslation.class);
    
+   /** Locale used by the text strings.  Used as the source language when
+    *  translating into other languages. This field will be set by the
+    *  {@link #init} method.
+    */
+   protected Locale locale;
+   
    public BaseTranslation()
    {
    }
 
    public static String complete(String template, String arg1)
    {
-      if (template.indexOf("$1") < 0)
-      {
-         Throwable t = new Exception();
-         logger.error("Invalid template replacement. $1 not found");
-         t.printStackTrace();
-         return template;
-      }
-      return template.replace("$1", arg1);
+//      if (template.indexOf("$1") < 0)
+//      {
+//         Throwable t = new Exception();
+//         logger.error("Invalid template replacement. $1 not found");
+//         t.printStackTrace();
+//         return template;
+//      }
+//      return template.replace("$1", arg1);
+      return replace(template, "$1", arg1);
    }
 
    public static String complete(String template, String arg1, String arg2)
    {
-      if (template.indexOf("$1") < 0)
+//      if (template.indexOf("$1") < 0)
+//      {
+//         Throwable t = new Exception();
+//         logger.error("Invalid template replacement. $1 not found");
+//         t.printStackTrace();
+//         return template;
+//      }
+//      String result = template.replace("$1", arg1);
+//      if (template.indexOf("$2") < 0)
+//      {
+//         Throwable t = new Exception();
+//         logger.error("Invalid template replacement. $2 not found");
+//         t.printStackTrace();
+//         return result;
+//      }
+//      return result.replace("$2", arg2);
+      String result = replace(template, "$1", arg1);
+      return replace(result, "$2", arg2);
+   }
+
+   public static String complete(String template, String[] args)
+   {
+      String result = template;
+      int i = 0;
+      for (String arg : args)
+      {
+         ++i;
+         String pattern = "$" + i;
+         result = replace(result, pattern, arg);
+      }
+      return result;
+   }
+   
+   public static String replace(String template, String pattern, String replacement)
+   {
+      if (template.indexOf(pattern) < 0)
       {
          Throwable t = new Exception();
-         logger.error("Invalid template replacement. $1 not found");
+         logger.error("Invalid template replacement. " + pattern + " not found");
          t.printStackTrace();
          return template;
       }
-      String result = template.replace("$1", arg1);
-      if (template.indexOf("$2") < 0)
-      {
-         Throwable t = new Exception();
-         logger.error("Invalid template replacement. $2 not found");
-         t.printStackTrace();
-         return result;
-      }
-      return result.replace("$2", arg2);
+      return template.replace(pattern, replacement);
    }
-
-   public static void translate(BaseTranslation[] classes, String lang) throws InstantiationException, IllegalAccessException, FileNotFoundException
+   
+   public static void translate(BaseTranslation[] classes, String lang) throws InstantiationException, IllegalAccessException, FileNotFoundException, UnsupportedEncodingException
    {
       for (BaseTranslation msgClass : classes)
       {
@@ -177,7 +217,7 @@ public class BaseTranslation
       }
    }
    
-   public void translate(String lang) throws InstantiationException, IllegalAccessException, FileNotFoundException
+   public void translate(String lang) throws InstantiationException, IllegalAccessException, FileNotFoundException, UnsupportedEncodingException
    {
       File directory = new File(DEFAULT_LANG_LOCATION);
       if (!directory.exists())
@@ -198,7 +238,8 @@ public class BaseTranslation
          return;
       }
 //      BaseTranslation messages = msgClass.newInstance();
-      translate(new FileOutputStream(file), lang);
+      Writer writer = new UTF8Writer(file);
+      translate(writer, lang);
    }
    
 //   public static void save(Class<? extends BaseTranslation>[] classes) throws InstantiationException, IllegalAccessException, IOException
@@ -299,7 +340,7 @@ public class BaseTranslation
       }
    }
 
-   public void translate(OutputStream out, String lang)
+   public void translate(Writer out, String lang)
    {
       String language = LocaleUtils.getLanguage(lang);
       // TODO We should use Google translate to translate the following
@@ -307,7 +348,7 @@ public class BaseTranslation
       translate(out, lang, "Automatic translation for " + language);
    }
    
-   public void translate(OutputStream out, String lang, String comment)
+   public void translate(Writer out, String lang, String comment)
    {
       Class<? extends BaseTranslation> msgClass = this.getClass();
       logger.debug("Translating {} ", msgClass.getName());
@@ -324,7 +365,8 @@ public class BaseTranslation
             String translation = value;
             try
             {
-               translation = Translator.translate(value, lang);
+               String sourceLang = locale.getLanguage();
+               translation = Translator.translate(value, sourceLang, lang);
             }
             catch (Exception ex)
             {
@@ -368,6 +410,8 @@ public class BaseTranslation
    
    protected void init(Locale locale)
    {
+      this.locale = locale;
+      
       Class<? extends BaseTranslation> subclass = this.getClass();
       String className = getClassName(subclass);
       logger.debug("Initializing " + className);
@@ -391,27 +435,55 @@ public class BaseTranslation
       // will take precedence.
       String lang = langProperty;
       
+      if (lang == null)
+      {
+         logger.debug("org.anc.lang property not set.");
+      }
+      else
+      {
+         logger.debug("org.anc.lang property is {}", lang);
+      }
       if (!loadLanguage(langProperty, className, translation))
       {
          // That didn't work, so check for a language file specified by country
          // and language code.
+         logger.debug("Could not load language from org.anc.lang property.");
          Locale defaultLocale = Locale.getDefault();
          String country = defaultLocale.getCountry();
          lang = defaultLocale.getLanguage();
-         if (!loadLanguage(lang + "-" + country, className, translation))
+         if (country == null || "".equals(country)|| !loadLanguage(lang + "-" + country, className, translation))
          {
             // That didn't work either, try just the language code. If this
             // doesn't work the default values will be used.
+            if (country == null || "".equals(country))
+            {
+               logger.debug("Country is null for default Locale");
+            }
+            else
+            {
+               logger.debug("Could not load language file for {}-{}", lang, country);
+            }
             if (!loadLanguage(lang, className, translation))
             {
-               // If the language used in the subclass is not the same as the
-               // local language then the messages need to be translated.
-               translate = !defaultLocale.equals(locale);
+               logger.debug("Could not load language file for {}", lang);
+               // translate = !defaultLocale.equals(locale);
                if (langProperty != null)
                {
                   // If the LANG_PROPERTY was set then that should
                   // be the target language.
                   lang = langProperty;
+               }
+               
+               // We only need to translate the messages if the locale of the
+               // messages is not the same as the desired locale.
+               translate = !lang.equals(locale.getLanguage());
+               if (translate)
+               {
+                  logger.debug("Messages need translation to {}", lang);
+               }
+               else
+               {
+                  logger.debug("No translation requried.");
                }
             }
          }
@@ -456,9 +528,10 @@ public class BaseTranslation
             // Check if we need to translate the string into the local language.
             if (translate)
             {
+               logger.debug("Translating to " + lang);
                try
                {
-                  value = Translator.translate(value, lang);
+                  value = Translator.translate(value, locale.getLanguage(), lang);
                   save = true;
                }
                catch (Exception e)
@@ -535,17 +608,18 @@ public class BaseTranslation
          throws IOException, SecurityException, IllegalArgumentException,
          NoSuchFieldException, IllegalAccessException
    {
-      FileInputStream out = null;
+//      FileInputStream out = null;
+      Reader reader = new UTF8Reader(propFile);
       try
       {
-         out = new FileInputStream(propFile);
-         props.load(out);
+//         out = new FileInputStream(propFile);
+         props.load(reader);
       }
       finally
       {
-         if (out != null)
+         if (reader != null)
          {
-            out.close();
+            reader.close();
          }
       }
 }

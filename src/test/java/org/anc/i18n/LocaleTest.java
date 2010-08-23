@@ -16,25 +16,43 @@
  */
 package org.anc.i18n;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
+import org.anc.io.UTF8Writer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 /** Test to ensure local languages are detected are detected correctly. */
-@Ignore
+//@Ignore
 public class LocaleTest
 {
    protected static void printAll()
    {
       Messages messages = new Messages();
-      System.out.println(messages.HELLO);
-      System.out.println(messages.GOODBYE);
+      try
+      {
+//         OutputStreamWriter osw = new OutputStreamWriter(System.out, "UTF-8");
+         UTF8Writer osw = new UTF8Writer("c:/temp/translation.txt");
+         PrintWriter writer = new PrintWriter(osw);
+         writer.println(messages.HELLO);
+         writer.println(messages.GOODBYE);
+         writer.close();
+      }
+      catch (IOException e)
+      {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
    }
    
-   //@Before
+   @Before
    public void setup()
    {
       System.out.println("Setting up Locale test.");
@@ -122,7 +140,7 @@ final class Messages extends BaseTranslation
 {
    @Default("Hello world.")
    public final String HELLO = null;
-   @Default("Goodbye cruel world.")
+   @Default("Goodbye cruel world. You may edit the file.")
    public final String GOODBYE = null;
    
 //   public Messages() { }
