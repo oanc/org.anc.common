@@ -16,7 +16,9 @@
  */
 package org.anc.args;
 
-import org.anc.i18n.BaseTranslation;
+import org.anc.i18n.*;
+
+import java.util.Locale;
 
 public class ParameterErrors extends BaseTranslation
 {
@@ -31,7 +33,6 @@ public class ParameterErrors extends BaseTranslation
    
    public ParameterErrors()
    {
-      super();
-      super.init();
+      super.init(Locale.US);
    }
 }
