@@ -17,10 +17,8 @@
 package org.anc.i18n;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -33,12 +31,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import org.anc.io.UTF8Reader;
 import org.anc.io.UTF8Writer;
-import org.json.JSONException;
-import org.slf4j.*;
+import org.anc.logging.FakeLogger;
+import org.anc.logging.FakeLoggerFactory;
 
 /**
  * The BaseTranslation class is used to provide alternate language translations
@@ -137,7 +134,8 @@ public class BaseTranslation
    public static final String LANG_PROPERTY = "org.anc.lang";
    public static final String DEFAULT_LANG_LOCATION = "i18n";
 
-   protected static final Logger logger = LoggerFactory.getLogger(BaseTranslation.class);
+   protected static final FakeLogger logger = 
+      FakeLoggerFactory.getLogger(FakeLogger.Level.NONE);
    
    /** Locale used by the text strings.  Used as the source language when
     *  translating into other languages. This field will be set by the
@@ -274,7 +272,8 @@ public class BaseTranslation
          logger.info("Default language file already exists.");
          return;
       }
-      logger.info("Saving messages for {} to {}", className, file.getAbsoluteFile());
+      logger.info("Saving messages for {}", className);
+      logger.info("Saving to {}", file.getPath());
 //      BaseTranslation messages = msgClass.newInstance();
       write(file);
    }
@@ -410,6 +409,11 @@ public class BaseTranslation
    
    protected void init(Locale locale)
    {
+      init(locale, false);
+   }
+   
+   protected void init(Locale locale, boolean translate)
+   {
       this.locale = locale;
       
       Class<? extends BaseTranslation> subclass = this.getClass();
@@ -421,7 +425,7 @@ public class BaseTranslation
       // local language. When set the @Default string values will be 
       // translated to the local language using the Google translate web 
       // service and saved to disk for future use.
-      boolean translate = false;
+//      boolean translate = false;
       
       // If the translation (if any) was successful this flag will be set
       // and the translated file will be saved.
@@ -461,7 +465,7 @@ public class BaseTranslation
             }
             else
             {
-               logger.debug("Could not load language file for {}-{}", lang, country);
+               logger.debug("Could not load language file country {}", country);
             }
             if (!loadLanguage(lang, className, translation))
             {
@@ -476,7 +480,7 @@ public class BaseTranslation
                
                // We only need to translate the messages if the locale of the
                // messages is not the same as the desired locale.
-               translate = !lang.equals(locale.getLanguage());
+               translate = translate && !lang.equals(locale.getLanguage());
                if (translate)
                {
                   logger.debug("Messages need translation to {}", lang);
@@ -550,7 +554,8 @@ public class BaseTranslation
             // continue.
             try
             {
-               logger.debug("Setting {} to {}", field.getName(), value);
+               logger.debug("Setting {} ", field.getName());
+               logger.debug("To value {}", value);
                field.set(this, value);
             }
             catch (IllegalArgumentException e)
@@ -635,4 +640,10 @@ public class BaseTranslation
 //      return name;
       return theClass.getName();
    }
+   
+   private static void debug(String message)
+   {
+      System.out.println(message);
+   }
 }
+

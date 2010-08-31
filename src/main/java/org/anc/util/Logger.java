@@ -34,7 +34,7 @@ import org.anc.Sys;
  * methods.
  * 
  * @author Keith Suderman
- * @deprecated Use SLF4J and Logback for logging.
+ * @deprecated Use SLF4J/Logback or the org.anc.logging classes for logging.
  */
 @Deprecated
 public class Logger
