@@ -60,11 +60,13 @@ public class Pair<E1, E2> implements Map.Entry<E1, E2>
       this.second = second;
    }
 
+   @Override
    public E1 getKey()
    {
       return first;
    }
 
+   @Override
    public E2 getValue()
    {
       return second;
@@ -75,6 +77,7 @@ public class Pair<E1, E2> implements Map.Entry<E1, E2>
       first = key;
    }
 
+   @Override
    public E2 setValue(E2 value)
    {
       second = value;

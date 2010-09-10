@@ -22,7 +22,7 @@ import java.util.*;
  * There are three flavors of the close method:
  * <ol>
  * <li>{@link #close()} : will re-throw runtime and checked exceptions.
- * <li>{@link #closeQuiety()} : will discard any checked exceptions and re-throw
+ * <li>{@link #closeQuietly()} : will discard any checked exceptions and re-throw
  * runtime exceptions.
  * <li>{@link #closeAbruptly()} : ignores all exceptions.
  * </ol>

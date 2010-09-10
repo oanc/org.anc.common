@@ -31,6 +31,7 @@ public class FileContentsIterator implements Iterable<String>
       this.file = file;
    }
 
+   @Override
    public java.util.Iterator<String> iterator()
    {
       return new Iterator();
@@ -56,11 +57,13 @@ public class FileContentsIterator implements Iterable<String>
          }
       }
 
+      @Override
       public boolean hasNext()
       {
          return line != null;
       }
 
+      @Override
       public String next()
       {
          String result = line;
@@ -76,6 +79,7 @@ public class FileContentsIterator implements Iterable<String>
          return result;
       }
 
+      @Override
       public void remove()
       {
          throw new UnsupportedOperationException(

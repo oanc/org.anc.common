@@ -71,6 +71,7 @@ public class ErrorCounter implements ErrorHandler
     * @throws SAXException
     *            Any SAX exception, possibly wrapping another exception.
     */
+   @Override
    public void error(SAXParseException ex) throws SAXException
    {
       fErrorMessages.add(ex.getMessage());
@@ -84,6 +85,7 @@ public class ErrorCounter implements ErrorHandler
     * @throws SAXException
     *            Any SAX exception, possibly wrapping another exception.
     */
+   @Override
    public void fatalError(SAXParseException ex) throws SAXException
    {
       fErrorMessages.add(ex.getMessage());
@@ -97,6 +99,7 @@ public class ErrorCounter implements ErrorHandler
     * @throws SAXException
     *            Any SAX exception, possibly wrapping another exception.
     */
+   @Override
    public void warning(SAXParseException ex) throws SAXException
    {
       fErrorMessages.add(ex.getMessage());

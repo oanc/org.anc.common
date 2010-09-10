@@ -183,6 +183,7 @@ public class SkipList<T extends Comparable<T>> implements Iterable<T>
       node = null;
    }
 
+   @Override
    public Iterator<T> iterator()
    {
       return new SkipListIterator(fHead);
@@ -473,11 +474,13 @@ public class SkipList<T extends Comparable<T>> implements Iterable<T>
          iterator = start;
       }
 
+      @Override
       public boolean hasNext()
       {
          return iterator != null;
       }
 
+      @Override
       public T next()
       {
          T result = iterator.getItem();
@@ -485,6 +488,7 @@ public class SkipList<T extends Comparable<T>> implements Iterable<T>
          return result;
       }
 
+      @Override
       public void remove()
       {
          if (iterator == null)

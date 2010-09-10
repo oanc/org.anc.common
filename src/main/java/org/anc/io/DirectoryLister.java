@@ -95,6 +95,7 @@ public class DirectoryLister implements Iterable<File>
       this.filter = filter;
    }
 
+   @Override
    public Iterator<File> iterator()
    {
       getListing();
@@ -125,11 +126,13 @@ public class DirectoryLister implements Iterable<File>
 
       }
 
+      @Override
       public boolean hasNext()
       {
          return listing != null && index < listing.length;
       }
 
+      @Override
       public File next()
       {
          if (!hasNext())
@@ -141,6 +144,7 @@ public class DirectoryLister implements Iterable<File>
          return result;
       }
 
+      @Override
       public void remove()
       {
          throw new UnsupportedOperationException(
