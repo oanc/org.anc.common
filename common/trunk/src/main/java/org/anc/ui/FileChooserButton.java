@@ -61,6 +61,7 @@ public class FileChooserButton extends JButton implements ActionListener
       this.addActionListener(this);
    }
 
+   @Override
    public void actionPerformed(ActionEvent e)
    {
       if (chooser == null)

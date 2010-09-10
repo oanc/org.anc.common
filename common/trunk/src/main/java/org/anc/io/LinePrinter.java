@@ -117,51 +117,61 @@ class StreamLinePrinter implements ILinePrinter
       out = stream;
    }
 
+   @Override
    public void println()
    {
       out.println();
    }
 
+   @Override
    public void println(Object object)
    {
       out.println(object);
    }
 
+   @Override
    public void println(String s)
    {
       out.println(s);
    }
 
+   @Override
    public void println(char[] ch)
    {
       out.println(ch);
    }
 
+   @Override
    public void println(char c)
    {
       out.println(c);
    }
 
+   @Override
    public void print(Object object)
    {
       out.print(object);
    }
 
+   @Override
    public void print(String s)
    {
       out.print(s);
    }
 
+   @Override
    public void print(char[] ch)
    {
       out.print(ch);
    }
 
+   @Override
    public void print(char c)
    {
       out.print(c);
    }
 
+   @Override
    public void close()
    {
       out.close();
@@ -177,51 +187,61 @@ class WriterLinePrinter implements ILinePrinter
       out = writer;
    }
 
+   @Override
    public void println()
    {
       out.println();
    }
 
+   @Override
    public void println(Object object)
    {
       out.println(object);
    }
 
+   @Override
    public void println(String s)
    {
       out.println(s);
    }
 
+   @Override
    public void println(char[] ch)
    {
       out.println(ch);
    }
 
+   @Override
    public void println(char c)
    {
       out.println(c);
    }
 
+   @Override
    public void print(Object object)
    {
       out.print(object);
    }
 
+   @Override
    public void print(String s)
    {
       out.print(s);
    }
 
+   @Override
    public void print(char[] ch)
    {
       out.print(ch);
    }
 
+   @Override
    public void print(char c)
    {
       out.print(c);
    }
 
+   @Override
    public void close()
    {
       out.close();

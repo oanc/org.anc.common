@@ -121,6 +121,7 @@ public abstract class BaseDialog<T> extends JDialog implements ActionListener
 
    protected abstract JPanel makeMainPanel();
 
+   @Override
    public void actionPerformed(ActionEvent event)
    {
       accepted = (event.getSource() == createButton);

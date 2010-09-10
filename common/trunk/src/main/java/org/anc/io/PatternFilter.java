@@ -51,6 +51,7 @@ public class PatternFilter implements FileFilter
       this.listDirectories = listDirectories;
    }
 
+   @Override
    public boolean accept(File file)
    {
       if (pattern == null)

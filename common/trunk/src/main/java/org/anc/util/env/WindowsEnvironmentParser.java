@@ -43,6 +43,7 @@ public class WindowsEnvironmentParser implements IEnvironmentParser
       reload();
    }
 
+   @Override
    public Iterator<Pair<String, String>> iterator()
    {
       return variables.iterator();

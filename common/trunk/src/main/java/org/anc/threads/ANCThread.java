@@ -92,11 +92,12 @@ public abstract class ANCThread extends Thread implements Haltable
     * <code>notifyAll()</code> to wake anything that might be waiting on this
     * thread.
     */
+   @Override
    public synchronized void halt()
    {
       state = State.HALTED;
       fire(Event.HALTED);
-      // Incase anything is waiting on us.
+      // In case anything is waiting on us.
       notifyAll();
    }
 

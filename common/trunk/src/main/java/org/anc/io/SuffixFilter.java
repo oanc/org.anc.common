@@ -58,6 +58,7 @@ public class SuffixFilter implements FileFilter
     * @return <code>true</code> if and only if <code>path</code> should be
     *         included.
     */
+   @Override
    public boolean accept(File path)
    {
       if (path.isDirectory())

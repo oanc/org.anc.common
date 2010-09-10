@@ -50,6 +50,7 @@ public class PrefixFilter implements FileFilter
     * @return <code>true</code> if and only if <code>pathname</code> should be
     *         included. False otherwise.
     */
+   @Override
    public boolean accept(File path)
    {
       if (includeDirectories && path.isDirectory())

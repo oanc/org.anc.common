@@ -144,6 +144,7 @@ public class ProgressDialog extends JDialog
       buttonPanel.setLayout(flowLayout1);
       cancelButton.setText("Cancel");
       cancelButton.addActionListener(new ActionListener() {
+         @Override
          public void actionPerformed(ActionEvent e)
          {
             cancelButton_actionPerformed(e);

@@ -103,6 +103,7 @@ public class SparseArray<T> implements Iterable<T>
       fTable.clear();
    }
 
+   @Override
    public Iterator<T> iterator()
    {
       return new SparseArrayIterator<T>(fList.iterator());
@@ -140,16 +141,19 @@ class SparseArrayIterator<T> implements Iterator<T>
       iterator = it;
    }
 
+   @Override
    public boolean hasNext()
    {
       return iterator.hasNext();
    }
 
+   @Override
    public T next()
    {
       return iterator.next().getElement();
    }
 
+   @Override
    public void remove()
    {
       //      Iterator<Element> next = iterator.next();
@@ -183,6 +187,7 @@ class Element<T> implements Comparable<Element<T>>
     * Two elements are ordered by their index and are equal iff their indices
     * are the same.
     */
+   @Override
    public int compareTo(Element<T> other)
    {
       return (int) (index - other.index);
@@ -246,6 +251,7 @@ class Index implements Comparable<Index>
       fIndex = index;
    }
 
+   @Override
    public int compareTo(Index i)
    {
       return (int) (fIndex - i.fIndex);

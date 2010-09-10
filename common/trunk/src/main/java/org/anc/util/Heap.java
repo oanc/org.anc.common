@@ -403,11 +403,13 @@ public class Heap<T extends Comparable<T>> extends AbstractCollection<T>
       {
       }
 
+      @Override
       public boolean hasNext()
       {
          return pointer <= size;
       }
 
+      @Override
       @SuppressWarnings("unchecked")
       public T next()
       {
@@ -416,6 +418,7 @@ public class Heap<T extends Comparable<T>> extends AbstractCollection<T>
          return result;
       }
 
+      @Override
       public void remove()
       {
          throw new UnsupportedOperationException(
