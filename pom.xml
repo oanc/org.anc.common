@@ -11,6 +11,7 @@
 	<!-- Added a comment to test svn ci -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<release.type>release</release.type>
 	</properties>
 	<issueManagement>
 		<system>Trac</system>
@@ -91,7 +92,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.4</version>
 				<inherited>true</inherited>
 				<configuration>
 					<uniqueVersion>false</uniqueVersion>
@@ -108,10 +108,10 @@
 								${project.build.directory}/${project.artifactId}-${project.version}.jar
 							</file>
 							<repositoryId>
-								anc-dev-snapshot
+								anc-dev-${release.type}
 							</repositoryId>
 							<url>
-								dav:http://www.anc.org/maven/snapshot
+								dav:http://www.anc.org/maven/${release.type}
 							</url>
 							<pomFile>${basedir}/pom.xml</pomFile>
 						</configuration>
@@ -140,11 +140,14 @@
 			<version>4.4</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.anc.i18n</groupId>
+			<artifactId>i18n</artifactId>
+			<version>1.0.0</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
 		<!--
-			<dependency> <groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId> <version>2.8.1</version>
-			</dependency>
-		-->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -165,11 +168,13 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.anc.i18n</groupId>
-			<artifactId>i18n</artifactId>
-			<version>1.0.0</version>
+			<groupId>org.anc</groupId>
+			<artifactId>logging</artifactId>
+			<version>1.1.0</version>
 			<type>jar</type>
+			<scope>provided</scope>
 		</dependency>
+		-->
 	</dependencies>
 	<reporting>
 		<plugins>
