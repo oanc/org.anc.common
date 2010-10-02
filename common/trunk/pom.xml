@@ -69,7 +69,8 @@
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Description>ANC Common Utilities</Bundle-Description>
 						<Bundle-Activator>org.anc.common.Activator</Bundle-Activator>
-						<Export-Package>org.anc,org.anc.dom,org.anc.io,org.anc.masc,org.anc.resource,org.anc.ssl,org.anc.threads,org.anc.ui,org.anc.util,org.anc.xml</Export-Package>
+						<Export-Package>org.anc,org.anc.common,org.anc.io,org.anc.masc,org.anc.resource,org.anc.ssl,org.anc.threads,org.anc.ui,org.anc.util,org.anc.xml</Export-Package>
+						<Private-Package>org.anc.dom</Private-Package>
 					</instructions>
 				</configuration>
 			</plugin>
