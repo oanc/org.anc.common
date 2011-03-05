@@ -100,7 +100,7 @@
 	<distributionManagement>
 		<site>
 			<id>anc-scp</id>
-			<url>scp://suderman@anc.org:/var/www/anc/projects/anc-common</url>
+			<url>scp://suderman@anc.org:/home/www/anc/projects/anc-common</url>
 		</site>
 	</distributionManagement>
 </project>
