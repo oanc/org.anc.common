@@ -24,5 +24,5 @@ package org.anc.threads;
  */
 public interface Notifiable<T>
 {
-   void notify(T message);
+   void signal(T message);
 }
