@@ -20,6 +20,7 @@ package org.anc.constants;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,9 +36,9 @@ import java.util.Properties;
 /**
  * The base class used for declaring project wide constant values.
  * 
- * <p>Each class that extends Constants defines <tt>public final</tt> fields that will
- * initialized with values from a properties file. The initial, or default, values to use
- * if the properties file does not exist as specified with @Default annotations on each 
+ * <p>Each sub-class defines {@code public final} fields that will be
+ * initialized with values from a properties file. The default values to use
+ * if the properties file does not exist are specified with @Default annotations on each 
  * field.
  * <pre>
  * package org.anc.example;
@@ -52,14 +53,14 @@ import java.util.Properties;
  *    }
  * }
  * </pre>
- * <p>Each public field in the subclass should be initialized to null and the subclass
- * constructor(s) must call <tt>super.init()</tt>. An instance of the subclass can then 
+ * <p>Each public field in the subclass must be initialized to null and the subclass
+ * constructor(s) must call {@code super.init()}. An instance of the subclass can then 
  * be created (usually as a static final field of the application object) to access the 
  * defined constants.
  * <pre>
  * public class Application
  * {
- *    public static final Constants CONST = new Constants();
+ *    public static final MyConstants CONST = new MyConstants();
  *    
  *    public void run()
  *    {
@@ -67,15 +68,47 @@ import java.util.Properties;
  *    }
  * }
  * </pre>
- * <p>The Constants class allows projects to "hard-code" constant values, but still permit
- * the values to be initialized in a system dependent way without changing any source
- * code.
- * <p>The Constants' <tt>init</tt> method will try to load the properties file from the 
- * class path using the name "conf/machineName/subClassName.properties", where "machineName"
- * is the name returned by <tt>System.getenv("HOSTNAME")</tt> or <tt>System.getenv("COMPUTERNAME")</tt>.
- * For example, if the above MyConstants class is used on the machine SCOTTY the class will 
- * be initialized with values from
- * <tt>conf/scotty/org.anc.example.MyConstants.properties</tt>.
+ * <p>
+ * If no properties file is specified the {@code Constants} class will look for the 
+ * resource {@code /conf/machineName/className.properties} on the classpath; where
+ * {@code machineName} is the value of the environment variable COMPUTERNAME (Windows) or
+ * HOSTNAME (OS X/Linux) and {@code className} is the fully qualified name of the Java
+ * class that extends {@code Constants}, ie {@code org.anc.example.MyConstants.properties}.
+ * <p>
+ * A sub-class can also specify the properties file to use with the {@code init(String)} 
+ * method. The String parameter passed to the {@code init} method should be the name of a 
+ * Java system property or an OS environmental variable. The {@code Constants} class 
+ * will first try {@code System.getProperty} and then {@code System.getenv} to obtain 
+ * a file name. If neither property has been set the above method is used to locate
+ * the properties file. For example,
+ * <pre>
+ * // In MyConstants.java
+ * package org.anc.example;
+ * public class MyConstants extends Constants
+ *    {
+ *       @Default("Hello world")
+ *       public final String HELLO_WORLD = null;
+ *       
+ *       public MyConstants()
+ *       {
+ *          super.init("org.anc.hello");
+ *       }
+ *       
+ *       public static void main(String[] args)
+ *       {
+ *          MyConstants constants = new MyConstants();
+ *          System.out.println(constants.HELLO_WORLD);
+ *       }
+ *    }
+ * 
+ * # In /home/anc/hello.properties
+ * HELLO_WORLD=Bonjour le monde.
+ * 
+ * # From the command line:
+ * > java -cp MyConstants.jar -Dorg.anc.hello=/home/anc/hello.properties org.anc.example.MyConstants
+ * > Bonjour le monde
+ * </pre>
+ * 
  * 
  * @author Keith Suderman
  *
@@ -163,8 +196,38 @@ public abstract class Constants
       }
    }
    
-   protected String getName()
+   protected Properties getProperties(String propName) throws FileNotFoundException, IOException
    {
+      Properties props = new Properties();
+      String propValue = null;
+      if (propName != null)
+      {
+         propValue = System.getProperty(propName);
+         if (propValue != null)
+         {
+            props.load(new FileReader(propValue));
+            return props;
+         }
+         
+         propValue = System.getenv(propName);
+         if (propValue != null)
+         {
+            props.load(new FileReader(propValue));
+            return props;
+         }
+      }      
+      propValue = getName();
+      InputStream in = ClassLoader.getSystemResourceAsStream(propValue);
+      if (in == null)
+      {
+         throw new FileNotFoundException("Properties not found.");
+      }
+      props.load(in);
+      return props;
+   }
+   
+   protected String getName()
+   {      
       Class<? extends Constants> subclass = this.getClass();     
       String name = System.getenv("COMPUTERNAME");
       if (name == null)
@@ -178,28 +241,24 @@ public abstract class Constants
       return "conf/" + name.toLowerCase() + "/" + subclass.getName() + ".properties";
    }
    
-   
    protected void init()
    {
-      String name = getName();
-      init(name);
+      init(null);
    }
    
-   protected void init(String name)
+   protected void init(String propertyName)
    {
-      Properties props = new Properties();
-      InputStream is = ClassLoader.getSystemResourceAsStream(name);
-      if (is != null)
+      Properties props;
+      try
       {
-         try
-         {
-            props.load(is);
-         }
-         catch (IOException e)
-         {
-            // Silently ignore.
-         }
+         props = getProperties(propertyName);
       }
+      catch (Exception e)
+      {
+         // Ignore exceptions and use the default values.
+         props = new Properties();
+      }
+
       Class<? extends Constants> subclass = this.getClass();
       Field[] fields = subclass.getDeclaredFields();
       for (Field field : fields)
