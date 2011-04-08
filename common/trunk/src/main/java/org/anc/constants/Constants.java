@@ -229,7 +229,11 @@ public abstract class Constants
    protected String getName()
    {      
       Class<? extends Constants> subclass = this.getClass();     
-      String name = System.getenv("COMPUTERNAME");
+      String name = System.getProperty("user.name");
+      if (name == null)
+      {
+    	  name = System.getenv("COMPUTERNAME");
+      }
       if (name == null)
       {
          name = System.getenv("HOSTNAME");
