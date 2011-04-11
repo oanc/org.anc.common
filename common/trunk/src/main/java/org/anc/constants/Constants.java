@@ -38,13 +38,13 @@ import java.util.Properties;
  * 
  * <p>Each sub-class defines {@code public final} fields that will be
  * initialized with values from a properties file. The default values to use
- * if the properties file does not exist are specified with @Default annotations on each 
+ * if the properties file does not exist are specified with &#064;Default annotations on each 
  * field.
  * <pre>
  * package org.anc.example;
  * public class MyConstants extends Constants
  * {
- *    @Default("Hello world.")
+ *    &#064;Default("Hello world.")
  *    public final String HELLO_WORLD = null;
  *    
  *    public MyConstants()
@@ -86,7 +86,7 @@ import java.util.Properties;
  * package org.anc.example;
  * public class MyConstants extends Constants
  *    {
- *       @Default("Hello world")
+ *       &#064;Default("Hello world")
  *       public final String HELLO_WORLD = null;
  *       
  *       public MyConstants()
