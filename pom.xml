@@ -49,11 +49,23 @@
 		<url>http://www.anc.org</url>
 	</organization>
 	 -->
+	<issueManagement>
+		<system>Trac</system>
+		<url>https://www.anc.org/wiki</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Hudon</system>
+		<url>http://www.anc.org:8080/hudson</url>
+	</ciManagement>
 	<scm>
 		<connection>scm:svn:http://www.anc.org/svn/common</connection>
 		<developerConnection>scm:svn:https://www.anc.org/svn/common</developerConnection>
 		<url>http://www.anc.org/svn/common</url>
 	</scm>
+	<organization>
+		<name>The American National Corpus</name>
+		<url>http://www.anc.org</url>
+	</organization>
 	<build>
 		<finalName>${versioned.name}</finalName>
 		<!--
