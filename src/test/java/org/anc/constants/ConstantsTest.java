@@ -41,6 +41,15 @@ class D extends Constants
 
 public class ConstantsTest 
 {
+   // This isn't so much a unit test as it is a way to log on remote servers
+   // what it thinks its name is.
+   @Test
+   public void testGetName()
+   {
+      A a = new A();
+      System.out.println("getName returns " + a.getName());
+      assertTrue(a.getName() != null);
+   }
 
    @Test
    public void tesDefault()
