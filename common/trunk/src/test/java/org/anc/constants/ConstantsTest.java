@@ -66,6 +66,8 @@ public class ConstantsTest
    public void testFromConf()
    {
       C c = new C();
+      System.out.println("getName returns " + c.getName());
+      System.out.println("c.VALUE = " + c.VALUE);
       assertTrue("FILE".equals(c.VALUE));
    }
    
