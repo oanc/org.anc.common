@@ -4,12 +4,12 @@
 	<parent>
 		<artifactId>parent-pom</artifactId>
 		<groupId>org.anc.maven</groupId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.anc</groupId>
 	<artifactId>common</artifactId>
-	<version>2.7.2-SNAPSHOT</version>
+	<version>2.7.2</version>
 	<name>ANC Common Utilities</name>
 	<url>http://www.anc.org/</url>
 	<description>Common utility classes used in most ANC projects.</description>
@@ -17,38 +17,6 @@
 		<release.type>snapshot</release.type>
 		<last.stable.version>2.7.0</last.stable.version>
 	</properties>
-	<!--
-	<issueManagement>
-		<system>Trac</system>
-		<url>http://www.anc.org/wiki</url>
-	</issueManagement>
-	<licenses>
-		<license>
-			<name>Apache 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-		</license>
-	</licenses>
-	<ciManagement>
-		<system>Hudson</system>
-		<url>http://www.anc.org:8080/hudson/job/anc-common/</url>
-	</ciManagement>
-	<developers>
-		<developer>
-			<id>ksuderman</id>
-			<name>Keith Suderman</name>
-			<email>suderman@anc.org</email>
-			<organization>American National Corpus</organization>
-			<organizationUrl>http://www.anc.org/</organizationUrl>
-			<roles>
-				<role>Project Manager</role>
-			</roles>
-		</developer>
-	</developers>
-	<organization>
-		<name>The American National Corpus</name>
-		<url>http://www.anc.org</url>
-	</organization>
-	 -->
 	<issueManagement>
 		<system>Trac</system>
 		<url>https://www.anc.org/wiki</url>
@@ -68,27 +36,6 @@
 	</organization>
 	<build>
 		<finalName>${versioned.name}</finalName>
-		<!--
-		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.1.0</version>
-				<extensions>true</extensions>
-				<configuration>
-					<manifestLocation>META-INF</manifestLocation>
-					<instructions>
-						<Bundle-SymbolicName>${base.name}</Bundle-SymbolicName>
-						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Description>ANC Common Utilities</Bundle-Description>
-						<Bundle-Activator>org.anc.common.Activator</Bundle-Activator>
-						<Export-Package>org.anc,org.anc.common,org.anc.io,org.anc.masc,org.anc.resource,org.anc.ssl,org.anc.threads,org.anc.ui,org.anc.util,org.anc.xml</Export-Package>
-						<Private-Package>org.anc.dom</Private-Package>
-					</instructions>
-				</configuration>
-			</plugin>
-		</plugins>
-		-->
 	</build>
 	<dependencies>
 		<dependency>
