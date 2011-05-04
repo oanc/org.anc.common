@@ -14,7 +14,7 @@
 	<url>http://www.anc.org/</url>
 	<description>Common utility classes used in most ANC projects.</description>
 	<properties>
-		<release.type>snapshot</release.type>
+		<release.type>release</release.type>
 		<last.stable.version>2.7.0</last.stable.version>
 	</properties>
 	<issueManagement>
@@ -23,7 +23,7 @@
 	</issueManagement>
 	<ciManagement>
 		<system>Hudon</system>
-		<url>http://www.anc.org:8080/hudson</url>
+		<url>http://www.anc.org:8080/hudson/jobs/ANC%20Common</url>
 	</ciManagement>
 	<scm>
 		<connection>scm:svn:http://www.anc.org/svn/common</connection>
@@ -36,6 +36,13 @@
 	</organization>
 	<build>
 		<finalName>${versioned.name}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0-beta-3</version>
+			</plugin>
+		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
@@ -61,7 +68,7 @@
 	<distributionManagement>
 		<site>
 			<id>anc-scp</id>
-			<url>scp://suderman@anc.org:/home/www/anc/projects/anc-common</url>
+			<url>scp://suderman@anc.org:22022/home/www/anc/projects/anc-common</url>
 		</site>
 	</distributionManagement>
 </project>
