@@ -19,6 +19,7 @@ package org.anc;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
 
 import javax.swing.UIManager;
 
@@ -113,6 +114,22 @@ public abstract class Aspect
             "&gt;").replaceAll("\"", "&quot;");
    }
 
+   public static boolean delete(File file)
+   {
+      if (file.isDirectory())
+      {
+         File[] files = file.listFiles();
+         for (File f : files)
+         {
+            if (!delete(f))
+            {
+               return false;
+            }
+         }
+      }
+      return file.delete();
+   }
+   
    // Exception handling methods.
 
    public static void Catch(Exception e)
