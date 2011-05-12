@@ -34,8 +34,9 @@ public class DeleteTest
       File file = new File(directory, "deleteMe");
       createFile(file);
       assertTrue(file.exists());
-      Aspect.delete(file);
+      Aspect.delete(directory);
       assertTrue(!file.exists());
+      assertTrue(!directory.exists());
    }
    
    private void createFile(File file) throws IOException
