@@ -76,7 +76,7 @@ public class FileChooserButton extends JButton implements ActionListener
          chooser.setSelectedFile(file);
       }
 
-      if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION)
+      if (chooser.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION)
       {
          field.setText(chooser.getSelectedFile().getAbsolutePath());
       }
