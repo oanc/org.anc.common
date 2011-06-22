@@ -33,10 +33,10 @@ import java.awt.Insets;
  * <p>
  * The GridBagLayout manager makes its own copy of the GridBagConstraints object
  * so it is possible to use the same GBC object for all controls that you add to
- * a container. For example: <code>
+ * a container. For example: 
+ * <pre>
  * JPanel aPanel = new JPanel(new GridBagLayout());
  * GBC gbc = new GBC();
- * 
  * // Add controls in the first column
  * // Right align the controls
  * gbc.right();
@@ -63,7 +63,7 @@ import java.awt.Insets;
  * aPanel.add(control8, gbc.down());
  * aPanel.add(control9, gbc.down());
  * ...
- * </code>
+ * </pre>
  * 
  * @author Keith Suderman
  * @version 1.0
