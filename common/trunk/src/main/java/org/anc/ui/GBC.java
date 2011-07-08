@@ -85,7 +85,7 @@ public class GBC extends GridBagConstraints
    public GBC(int fill, int anchor, int width, int height)
    {
       // Don't you just love constructors that take 11 parameters...
-      super(0, 0, width, height, 0, 0, fill, anchor, new Insets(2, 4, 2, 4), 1,
+      super(0, 0, width, height, 0, 0, anchor, fill, new Insets(2, 4, 2, 4), 1,
             1);
    }
 
