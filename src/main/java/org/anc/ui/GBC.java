@@ -74,7 +74,7 @@ public class GBC extends GridBagConstraints
 
    public GBC()
    {
-      this(CENTER, BOTH, 1, 1);
+      this(BOTH, CENTER, 1, 1);
    }
 
    public GBC(int fill, int anchor)
