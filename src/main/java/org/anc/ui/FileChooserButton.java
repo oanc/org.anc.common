@@ -45,19 +45,21 @@ public class FileChooserButton extends JButton implements ActionListener
    protected Component parent;
    protected JTextField field;
    protected JFileChooser chooser;
-
+   protected String title;
+   
    public FileChooserButton(Component parent, JTextField field)
    {
-      this(parent, field, null);
+      this(parent, field, null, "Save");
    }
 
    public FileChooserButton(Component parent, JTextField field,
-         JFileChooser chooser)
+         JFileChooser chooser, String title)
    {
       super("...");
       this.parent = parent;
       this.field = field;
       this.chooser = chooser;
+      this.title = title;
       this.addActionListener(this);
    }
 
@@ -76,7 +78,7 @@ public class FileChooserButton extends JButton implements ActionListener
          chooser.setSelectedFile(file);
       }
 
-      if (chooser.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION)
+      if (chooser.showDialog(parent, title) == JFileChooser.APPROVE_OPTION)
       {
          field.setText(chooser.getSelectedFile().getAbsolutePath());
       }
