@@ -184,6 +184,20 @@ public abstract class Constants
                e.printStackTrace();
             }
          }
+         else if (isPublicFinalInteger(field))
+         {
+            String name = field.getName();
+            try
+            {
+               Integer value = (Integer) field.get(this);
+               props.put(name, value.toString());
+            }
+            catch (Exception e)
+            {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+            }
+         }
       }
       OutputStream os = new FileOutputStream(file);
       try
@@ -275,7 +289,7 @@ public abstract class Constants
                Default defaultValue = field.getAnnotation(Default.class);
                if (defaultValue == null)
                {
-                  throw new RuntimeException("Mission @Default annotation on "
+                  throw new RuntimeException("Missing @Default annotation on "
                         + field.getName());
                }
                value = defaultValue.value();
@@ -296,7 +310,24 @@ public abstract class Constants
 //               System.out.println("Using default value for " + field.getName());
                sValue = defaultValue.value();
             }
+            System.out.println("Attempting to set " + field.getName() + " to " + sValue);
             set(field, Integer.valueOf(sValue));
+         }
+         else if (isPublicFinalInteger(field))
+         {
+            String sValue = props.getProperty(field.getName());
+            if (sValue == null)
+            {
+               Default defaultValue = field.getAnnotation(Default.class);
+               if (defaultValue == null)
+               {
+                  throw new RuntimeException("Mission @Default annotation on "
+                        + field.getName());
+               }
+//               System.out.println("Using default value for " + field.getName());
+               sValue = defaultValue.value();
+            }
+            set(field, new Integer(sValue));
          }
          
       }
@@ -319,13 +350,30 @@ public abstract class Constants
       }
    }
 
+   private void set(Field field, Integer value)
+   {
+      try
+      {
+         field.setAccessible(true);
+         field.set(this, value);
+         System.out.println("Set " + field.getName() + " to " + field.get(this).toString());
+      }
+      catch (IllegalArgumentException e)
+      {
+         e.printStackTrace();
+      }
+      catch (IllegalAccessException e)
+      {
+         e.printStackTrace();
+      }
+   }
    private void set(Field field, int value)
    {
       try
       {
          field.setAccessible(true);
          field.set(this, value);
-//         System.out.println("Set " + field.getName() + " to " + value);
+         System.out.println("Set " + field.getName() + " to " + field.getInt(this));
       }
       catch (IllegalArgumentException e)
       {
@@ -344,10 +392,17 @@ public abstract class Constants
             && Modifier.isFinal(flags) && !Modifier.isStatic(flags);
    }
 
-   private static boolean isPublicFinalInt(Field field)
+   private static boolean isPublicFinalInteger(Field field)
    {
       int flags = field.getModifiers();
       return field.getType().equals(Integer.class) && Modifier.isPublic(flags)
+            && Modifier.isFinal(flags) && !Modifier.isStatic(flags);
+   }
+
+   private static boolean isPublicFinalInt(Field field)
+   {
+      int flags = field.getModifiers();
+      return field.getType().equals(int.class) && Modifier.isPublic(flags)
             && Modifier.isFinal(flags) && !Modifier.isStatic(flags);
    }
 }
