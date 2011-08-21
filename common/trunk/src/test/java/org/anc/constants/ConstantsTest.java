@@ -14,6 +14,7 @@ class A extends Constants
    public A()
    {
       super.init();
+      System.out.println("A.A() " + VALUE);
    }
 }
 
@@ -25,6 +26,7 @@ class C extends Constants
    public C()
    {
       super.init();
+      System.out.println("C.C() " + VALUE);
    }
 }
 
@@ -36,6 +38,7 @@ class D extends Constants
    public D()
    {
       super.init("org.anc.constants.test");
+      System.out.println("D.D() " + VALUE);
    }
 }
 
@@ -91,7 +94,7 @@ public class ConstantsTest
       C c = new C();
       System.out.println("getName returns " + c.getName());
       System.out.println("c.VALUE = " + c.VALUE);
-      assertTrue("FILE".equals(c.VALUE));
+      assertTrue("XFILEX".equals(c.VALUE));
    }
    
    @Test
