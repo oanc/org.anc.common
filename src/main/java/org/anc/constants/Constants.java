@@ -243,7 +243,7 @@ public abstract class Constants
    protected String getName()
    {      
       Class<? extends Constants> subclass = this.getClass();     
-      String name = System.getProperty("user.name");
+      String name = null;
       if (name == null)
       {
     	  name = System.getenv("COMPUTERNAME");
@@ -254,7 +254,11 @@ public abstract class Constants
       }
       if (name == null)
       {
-         name = "default";
+         name = System.getProperty("user.name");
+      }
+      if (name == null)
+      {
+         name = "constants";
       }
       return "conf/" + name.toLowerCase() + "/" + subclass.getName() + ".properties";
    }
@@ -310,7 +314,7 @@ public abstract class Constants
 //               System.out.println("Using default value for " + field.getName());
                sValue = defaultValue.value();
             }
-            System.out.println("Attempting to set " + field.getName() + " to " + sValue);
+//            System.out.println("Attempting toLowerCase set " + field.getName() + " to " + sValue);
             set(field, Integer.valueOf(sValue));
          }
          else if (isPublicFinalInteger(field))
