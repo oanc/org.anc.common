@@ -63,6 +63,11 @@ public class FileChooserButton extends JButton implements ActionListener
       this.addActionListener(this);
    }
 
+   public void setFileChooserButtonText(String text)
+   {
+      this.title = text;
+   }
+   
    @Override
    public void actionPerformed(ActionEvent e)
    {

@@ -39,6 +39,29 @@ class D extends Constants
    }
 }
 
+//class Int1 extends Constants
+//{
+//   @Default("999")
+//   public final int VALUE;
+//   
+//   public Int1()
+//   {
+//      super.init();
+////      VALUE = VALUE;
+//   }
+//}
+
+class Int2 extends Constants
+{
+   @Default("999")
+   public final Integer VALUE = null;
+   
+   public Int2()
+   {
+      super.init();
+   }
+}
+
 public class ConstantsTest 
 {
    // This isn't so much a unit test as it is a way to log on remote servers
@@ -80,6 +103,22 @@ public class ConstantsTest
       assertTrue("PROPERTY".equals(d.VALUE));
    }
    
+//   @Test
+//   public void testInt1()
+//   {
+//      Int1 i = new Int1();
+//      System.out.println("Int1: " + i.VALUE);
+//      assertTrue(i.VALUE == 999);
+//   }
+   
+   @Test
+   public void testInt2()
+   {
+      Int2 i = new Int2();
+      System.out.println("Int2: " + i.VALUE);
+      assertTrue(i.VALUE == 999);
+   }
+   
    public static void main(String[] args)
    {
       try
@@ -87,6 +126,11 @@ public class ConstantsTest
          C c = new C();
          System.out.println(c.VALUE);
          c.save();
+         
+//         Int1 i = new Int1();
+//         i.save();
+         Int2 j = new Int2();
+         j.save();
       }
       catch (FileNotFoundException e)
       {
