@@ -18,6 +18,7 @@ package org.anc.constants;
 
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -156,23 +157,9 @@ public abstract class Constants
       Class<? extends Constants> subclass = this.getClass();
       for (Field field : subclass.getDeclaredFields())
       {
-         if (isPublicFinalString(field)) 
+         String name = field.getName();
+         if (isPublicFinalInt(field))
          {
-            String name = field.getName();
-            String value = null;
-            try
-            {
-               value = field.get(this).toString();
-               props.put(name, value);
-            }
-            catch (Exception e)
-            {
-               // Ignore.
-            } 
-         }
-         else if (isPublicFinalInt(field))
-         {
-            String name = field.getName();
             try
             {
                int value = field.getInt(this);
@@ -180,33 +167,32 @@ public abstract class Constants
             }
             catch (Exception e)
             {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
+               // Ignore
             }
          }
-         else if (isPublicFinalInteger(field))
+         else if (isPublicFinalString(field) || 
+               isPublicFinalInteger(field) || 
+               isPublicFinalFloat(field) || 
+               isPublicFinalDouble(field))
          {
-            String name = field.getName();
             try
             {
-               Integer value = (Integer) field.get(this);
-               props.put(name, value.toString());
+               props.put(name, field.get(this).toString());
             }
             catch (Exception e)
             {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
+               // Ignore.
             }
          }
       }
       OutputStream os = new FileOutputStream(file);
       try
       {
-         props.store(os, "Executor constants.");
+         props.store(os, "Constants.");
       }
       catch (IOException e)
       {
-         
+         // TODO : this should be logged.
       }
    }
    
@@ -231,11 +217,23 @@ public abstract class Constants
          }
       }      
       propValue = getName();
-      InputStream in = ClassLoader.getSystemResourceAsStream(propValue);
+      InputStream in = null;
+      // First try to find the properties file on the file system.
+      File propFile = new File(propValue);
+      if (propFile.exists())
+      {
+         in = new FileInputStream(propFile);
+      }
+      
       if (in == null)
       {
-         throw new FileNotFoundException("Properties not found.");
+         in = ClassLoader.getSystemResourceAsStream(propValue);
+         if (in == null)
+         {
+            throw new FileNotFoundException("Properties not found.");
+         }
       }
+      // 'in' can not be null or an exception would have been thrown above.
       props.load(in);
       return props;
    }
@@ -285,59 +283,48 @@ public abstract class Constants
       Field[] fields = subclass.getDeclaredFields();
       for (Field field : fields)
       {
+         String value = getInitValue(props, field);
          if (isPublicFinalString(field))
          {
-            String value = props.getProperty(field.getName());
-            if (value == null)
-            {
-               Default defaultValue = field.getAnnotation(Default.class);
-               if (defaultValue == null)
-               {
-                  throw new RuntimeException("Missing @Default annotation on "
-                        + field.getName());
-               }
-               value = defaultValue.value();
-            }
             set(field, value);
          }
          else if (isPublicFinalInt(field))
          {
-            String sValue = props.getProperty(field.getName());
-            if (sValue == null)
-            {
-               Default defaultValue = field.getAnnotation(Default.class);
-               if (defaultValue == null)
-               {
-                  throw new RuntimeException("Mission @Default annotation on "
-                        + field.getName());
-               }
-//               System.out.println("Using default value for " + field.getName());
-               sValue = defaultValue.value();
-            }
-//            System.out.println("Attempting toLowerCase set " + field.getName() + " to " + sValue);
-            set(field, Integer.valueOf(sValue));
+            set(field, Integer.valueOf(value));
          }
          else if (isPublicFinalInteger(field))
          {
-            String sValue = props.getProperty(field.getName());
-            if (sValue == null)
-            {
-               Default defaultValue = field.getAnnotation(Default.class);
-               if (defaultValue == null)
-               {
-                  throw new RuntimeException("Mission @Default annotation on "
-                        + field.getName());
-               }
-//               System.out.println("Using default value for " + field.getName());
-               sValue = defaultValue.value();
-            }
-            set(field, new Integer(sValue));
+            set(field, new Integer(value));
          }
-         
+         else if (isPublicFinalFloat(field))
+         {
+            set(field, new Float(value));
+         }
+         else if (isPublicFinalDouble(field))
+         {
+            set(field, new Double(value));
+         }
       }
    }
 
-   private void set(Field field, String value)
+   private String getInitValue(Properties props, Field field)
+   {
+      String sValue = props.getProperty(field.getName());
+      if (sValue == null)
+      {
+         Default defaultValue = field.getAnnotation(Default.class);
+         if (defaultValue == null)
+         {
+            // This is definitely a programming error.
+            throw new RuntimeException("Missing @Default annotation on "
+                  + field.getName());
+         }
+         sValue = defaultValue.value();
+      }
+      return sValue;
+   }
+   
+   private void set(Field field, Object value)
    {
       try
       {
@@ -354,23 +341,23 @@ public abstract class Constants
       }
    }
 
-   private void set(Field field, Integer value)
-   {
-      try
-      {
-         field.setAccessible(true);
-         field.set(this, value);
-         System.out.println("Set " + field.getName() + " to " + field.get(this).toString());
-      }
-      catch (IllegalArgumentException e)
-      {
-         e.printStackTrace();
-      }
-      catch (IllegalAccessException e)
-      {
-         e.printStackTrace();
-      }
-   }
+//   private void set(Field field, Integer value)
+//   {
+//      try
+//      {
+//         field.setAccessible(true);
+//         field.set(this, value);
+//      }
+//      catch (IllegalArgumentException e)
+//      {
+//         e.printStackTrace();
+//      }
+//      catch (IllegalAccessException e)
+//      {
+//         e.printStackTrace();
+//      }
+//   }
+   
    private void set(Field field, int value)
    {
       try
@@ -389,24 +376,35 @@ public abstract class Constants
       }
    }
 
-   private static boolean isPublicFinalString(Field field)
+   protected static boolean isPublicFinalString(Field field)
    {
-      int flags = field.getModifiers();
-      return field.getType().equals(String.class) && Modifier.isPublic(flags)
-            && Modifier.isFinal(flags) && !Modifier.isStatic(flags);
+      return isType(String.class, field);
    }
 
-   private static boolean isPublicFinalInteger(Field field)
+   protected static boolean isPublicFinalInteger(Field field)
    {
-      int flags = field.getModifiers();
-      return field.getType().equals(Integer.class) && Modifier.isPublic(flags)
-            && Modifier.isFinal(flags) && !Modifier.isStatic(flags);
+      return isType(Integer.class, field);
    }
 
-   private static boolean isPublicFinalInt(Field field)
+   protected static boolean isPublicFinalDouble(Field field)
+   {
+      return isType(Double.class, field);
+   }
+   
+   protected static boolean isPublicFinalFloat(Field field)
+   {
+      return isType(Float.class, field);
+   }
+   
+   protected static boolean isPublicFinalInt(Field field)
+   {
+      return isType(int.class, field);
+   }
+   
+   private static boolean isType(Class<?> theClass, Field field)
    {
       int flags = field.getModifiers();
-      return field.getType().equals(int.class) && Modifier.isPublic(flags)
+      return field.getType().equals(theClass) && Modifier.isPublic(flags)
             && Modifier.isFinal(flags) && !Modifier.isStatic(flags);
    }
 }
