@@ -65,6 +65,18 @@ class Int2 extends Constants
    }
 }
 
+class F extends Constants
+{
+   @Default("3.14")
+   public final Float F_PI = null;
+   @Default("3.14")
+   public final Double D_PI = null;
+   
+   public F()
+   {
+      super.init();
+   }
+}
 public class ConstantsTest 
 {
    // This isn't so much a unit test as it is a way to log on remote servers
@@ -120,6 +132,14 @@ public class ConstantsTest
       Int2 i = new Int2();
       System.out.println("Int2: " + i.VALUE);
       assertTrue(i.VALUE == 999);
+   }
+   
+   @Test
+   public void testFloats()
+   {
+      F f = new F();
+      assertTrue(f.D_PI == 3.14);
+      assertTrue(f.F_PI == 3.14f);
    }
    
    public static void main(String[] args)
