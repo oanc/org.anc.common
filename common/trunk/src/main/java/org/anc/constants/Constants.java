@@ -32,6 +32,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -118,6 +120,13 @@ public abstract class Constants
 {
    private static final long serialVersionUID = 1L;
 
+   /**
+    * Symbol table used to resolve variable names during initialization.
+    * After initialization is complete this should be set back to null to
+    * release the memory.
+    */
+   private Map<String, String> variables = null;
+   
    /**
     * Annotation used to provide a default value for constants.
     * 
@@ -268,6 +277,7 @@ public abstract class Constants
    
    protected void init(String propertyName)
    {
+      variables = new HashMap<String, String>();
       Properties props;
       try
       {
@@ -305,6 +315,7 @@ public abstract class Constants
             set(field, new Double(value));
          }
       }
+      variables = null;
    }
 
    private String getInitValue(Properties props, Field field)
@@ -321,7 +332,33 @@ public abstract class Constants
          }
          sValue = defaultValue.value();
       }
-      return sValue;
+      return replaceVariables(sValue);
+   }
+   
+   private String replaceVariables(String input)
+   {
+      int index = input.indexOf('$');
+      while (index >= 0)
+      {
+         int end = input.indexOf('/', index);
+         if (end < index)
+         {
+            end = input.length();
+         }
+         String key = input.substring(index + 1, end);
+         String value = variables.get(key);
+         if (value != null)
+         {
+            String prefix = input.substring(0, index);
+            input = prefix + value + input.substring(end);
+            index = input.indexOf('$', prefix.length());
+         }
+         else
+         {
+            index = input.indexOf('$', end);
+         }
+      }
+      return input;
    }
    
    private void set(Field field, Object value)
@@ -330,6 +367,10 @@ public abstract class Constants
       {
          field.setAccessible(true);
          field.set(this, value);
+         if (value instanceof String)
+         {
+            variables.put(field.getName(), value.toString());
+         }
       }
       catch (IllegalArgumentException e)
       {
@@ -358,23 +399,23 @@ public abstract class Constants
 //      }
 //   }
    
-   private void set(Field field, int value)
-   {
-      try
-      {
-         field.setAccessible(true);
-         field.set(this, value);
-         System.out.println("Set " + field.getName() + " to " + field.getInt(this));
-      }
-      catch (IllegalArgumentException e)
-      {
-         e.printStackTrace();
-      }
-      catch (IllegalAccessException e)
-      {
-         e.printStackTrace();
-      }
-   }
+//   private void set(Field field, int value)
+//   {
+//      try
+//      {
+//         field.setAccessible(true);
+//         field.set(this, value);
+//         System.out.println("Set " + field.getName() + " to " + field.getInt(this));
+//      }
+//      catch (IllegalArgumentException e)
+//      {
+//         e.printStackTrace();
+//      }
+//      catch (IllegalAccessException e)
+//      {
+//         e.printStackTrace();
+//      }
+//   }
 
    protected static boolean isPublicFinalString(Field field)
    {

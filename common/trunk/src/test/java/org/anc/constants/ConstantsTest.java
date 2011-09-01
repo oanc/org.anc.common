@@ -77,6 +77,53 @@ class F extends Constants
       super.init();
    }
 }
+
+class Variables extends Constants
+{
+   @Default("root")
+   public final String ROOT = null;
+   
+   @Default("$ROOT/foo")
+   public final String FOO = null;
+   
+   @Default("$FOO/bar")
+   public final String FOOBAR = null;
+   
+   @Default("$ROOT/$BAR")
+   public final String ROOT_BAR = null;
+   
+   @Default("$BAR/$ROOT")
+   public final String BAR_ROOT = null;
+   
+   @Default("$BAR/$ROOT/$BAR")
+   public final String BAR_ROOT_BAR = null;
+   
+   @Default("$ROOT/$BAR/$ROOT")
+   public final String ROOT_BAR_ROOT = null;
+   
+   public Variables()
+   {
+      super.init();
+   }
+}
+
+class FileVariables extends Constants
+{
+   @Default("root")
+   public final String ROOT = null;
+   
+   @Default("$ROOT/foo")
+   public final String FOO = null;
+   
+   @Default("$FOO/bar")
+   public final String FOOBAR = null;
+
+   public FileVariables()
+   {
+      super.init();
+   }
+}
+
 public class ConstantsTest 
 {
    // This isn't so much a unit test as it is a way to log on remote servers
@@ -89,6 +136,30 @@ public class ConstantsTest
       assertTrue(a.getName() != null);
    }
 
+   @Test
+   public void testVariables()
+   {
+      Variables V = new Variables();
+      check(V.ROOT, "root");
+      check(V.FOO, "root/foo");
+      check(V.FOOBAR, "root/foo/bar");
+      check(V.ROOT_BAR, "root/$BAR");
+      check(V.BAR_ROOT, "$BAR/root");
+      check(V.BAR_ROOT_BAR, "$BAR/root/$BAR");
+      check(V.ROOT_BAR_ROOT, "root/$BAR/root");
+      
+   }
+   
+   @Test
+   public void testFileVariables()
+   {
+      FileVariables V = new FileVariables();
+      check(V.ROOT, "root");
+      check(V.FOO, "root/foo");
+      check(V.FOOBAR, "root/foo/bar");
+   }
+   
+   
    @Test
    public void tesDefault()
    {
@@ -142,6 +213,12 @@ public class ConstantsTest
       assertTrue(f.F_PI == 3.14f);
    }
    
+   protected void check(String actual, String expected)
+   {
+//      System.out.println(actual + " : " + expected);
+      assertTrue(actual.equals(expected));
+   }
+   
    public static void main(String[] args)
    {
       try
@@ -154,6 +231,9 @@ public class ConstantsTest
 //         i.save();
          Int2 j = new Int2();
          j.save();
+         
+         FileVariables f = new FileVariables();
+         f.save();
       }
       catch (FileNotFoundException e)
       {
