@@ -239,7 +239,7 @@ public abstract class Constants
          in = ClassLoader.getSystemResourceAsStream(propValue);
          if (in == null)
          {
-            throw new FileNotFoundException("Properties not found.");
+            throw new FileNotFoundException("Properties " + propValue + " not found.");
          }
       }
       // 'in' can not be null or an exception would have been thrown above.
@@ -286,6 +286,7 @@ public abstract class Constants
       catch (Exception e)
       {
          // Ignore exceptions and use the default values.
+//         e.printStackTrace();
          props = new Properties();
       }
 
