@@ -167,19 +167,7 @@ public abstract class Constants
       for (Field field : subclass.getDeclaredFields())
       {
          String name = field.getName();
-         if (isPublicFinalInt(field))
-         {
-            try
-            {
-               int value = field.getInt(this);
-               props.put(name, Integer.toString(value));
-            }
-            catch (Exception e)
-            {
-               // Ignore
-            }
-         }
-         else if (isPublicFinalString(field) || 
+         if (isPublicFinalString(field) || 
                isPublicFinalInteger(field) || 
                isPublicFinalFloat(field) || 
                isPublicFinalDouble(field))
@@ -299,10 +287,6 @@ public abstract class Constants
          {
             set(field, value);
          }
-         else if (isPublicFinalInt(field))
-         {
-            set(field, Integer.valueOf(value));
-         }
          else if (isPublicFinalInteger(field))
          {
             set(field, new Integer(value));
@@ -314,6 +298,10 @@ public abstract class Constants
          else if (isPublicFinalDouble(field))
          {
             set(field, new Double(value));
+         }
+         else if (isPublicFinalBoolean(field))
+         {
+            set(field, new Boolean(value));
          }
       }
       variables = null;
@@ -362,7 +350,7 @@ public abstract class Constants
       return input;
    }
    
-   private void set(Field field, Object value)
+   private void set(Field field, Object value) 
    {
       try
       {
@@ -438,10 +426,15 @@ public abstract class Constants
       return isType(Float.class, field);
    }
    
-   protected static boolean isPublicFinalInt(Field field)
+   protected static boolean isPublicFinalBoolean(Field field)
    {
-      return isType(int.class, field);
+      return isType(Boolean.class, field);
    }
+   
+//   protected static boolean isPublicFinalInt(Field field)
+//   {
+//      return isType(int.class, field);
+//   }
    
    private static boolean isType(Class<?> theClass, Field field)
    {
