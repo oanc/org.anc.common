@@ -371,41 +371,6 @@ public abstract class Constants
       }
    }
 
-//   private void set(Field field, Integer value)
-//   {
-//      try
-//      {
-//         field.setAccessible(true);
-//         field.set(this, value);
-//      }
-//      catch (IllegalArgumentException e)
-//      {
-//         e.printStackTrace();
-//      }
-//      catch (IllegalAccessException e)
-//      {
-//         e.printStackTrace();
-//      }
-//   }
-   
-//   private void set(Field field, int value)
-//   {
-//      try
-//      {
-//         field.setAccessible(true);
-//         field.set(this, value);
-//         System.out.println("Set " + field.getName() + " to " + field.getInt(this));
-//      }
-//      catch (IllegalArgumentException e)
-//      {
-//         e.printStackTrace();
-//      }
-//      catch (IllegalAccessException e)
-//      {
-//         e.printStackTrace();
-//      }
-//   }
-
    protected static boolean isPublicFinalString(Field field)
    {
       return isType(String.class, field);
@@ -430,11 +395,6 @@ public abstract class Constants
    {
       return isType(Boolean.class, field);
    }
-   
-//   protected static boolean isPublicFinalInt(Field field)
-//   {
-//      return isType(int.class, field);
-//   }
    
    private static boolean isType(Class<?> theClass, Field field)
    {
