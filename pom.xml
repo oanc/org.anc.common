@@ -2,21 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<artifactId>osgi-parent-pom</artifactId>
+		<artifactId>parent-pom</artifactId>
 		<groupId>org.anc.maven</groupId>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.anc</groupId>
 	<artifactId>common</artifactId>
-	<version>2.7.5</version>
-	<packaging>bundle</packaging>
+	<version>2.7.6-SNAPSHOT</version>
 	<name>ANC Common Utilities</name>
 	<url>http://www.anc.org/</url>
 	<description>Common utility classes used in most ANC projects.</description>
 	<properties>
 		<release.type>release</release.type>
-		<last.stable.version>2.7.4</last.stable.version>
+		<last.stable.version>2.7.5</last.stable.version>
 	</properties>
 	<issueManagement>
 		<system>Trac</system>

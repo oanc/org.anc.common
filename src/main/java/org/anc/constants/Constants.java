@@ -224,7 +224,13 @@ public abstract class Constants
       
       if (in == null)
       {
-         in = ClassLoader.getSystemResourceAsStream(propValue);
+         ClassLoader loader = Thread.currentThread().getContextClassLoader();
+         if (loader == null)
+         {
+            loader = Constants.class.getClassLoader();
+         }
+//         in = ClassLoader.getSystemResourceAsStream(propValue);
+         in = loader.getResourceAsStream(propValue);
          if (in == null)
          {
             throw new FileNotFoundException("Properties " + propValue + " not found.");
