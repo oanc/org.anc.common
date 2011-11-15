@@ -35,7 +35,8 @@ import java.util.Iterator;
  * <b>NOTE:</b> The iterator returned by a call to method <tt>iterator()</tt>
  * iterates over the items present in the array and not the individual array
  * elements. For example, the following only prints two items even though the
- * array is 1,000 elements "long". <code>
+ * array is 1,000 elements "long". 
+ * <pre>
  *     SparseArray<String> array = new SparseArray<String>();
  *     array.setElementAt(0, "Hello");
  *     arrar.setElementAt(999, "World");
@@ -43,13 +44,13 @@ import java.util.Iterator;
  *     {
  *         System.out.println(s);
  *     }
- * </code>
+ * </pre>
  * 
- * @todo Implement the Collection interface and/or extend AbstractCollection.
  * 
  * @author Keith Suderman
  * @version 1.0
  */
+// TODO Implement the Collection interface and/or extend AbstractCollection.
 public class SparseArray<T> implements Iterable<T>
 {
    /** A list of the elements in the array to provide efficient iterator access. */
