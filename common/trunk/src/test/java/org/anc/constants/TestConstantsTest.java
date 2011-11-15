@@ -13,9 +13,9 @@ public class TestConstantsTest
    {
       TestConstants K = new TestConstants();
       File dir = new File(K.OANC);
-      assertTrue(dir.exists());
+      assertTrue(dir.getPath() + " Not found.", dir.exists());
       
-      File header = new File(K.HEADER);
-      assertTrue(header.exists());
+      File header = new File(dir, K.HEADER);
+      assertTrue(header.getPath() + " not found.", header.exists());
    }
 }
