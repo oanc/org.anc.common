@@ -50,8 +50,6 @@ import java.util.AbstractCollection;
  * O(<b>log</b> n)</i> time, that is, every <i>n<supp>th</supp></i> insert will
  * require a <i>O(n)</i> resize operation.
  * 
- * @todo Have the heap shrink in size when it becomes "mostly" empty.
- * 
  * @author Keith Suderman
  * @version 1.0
  * 
