@@ -308,6 +308,10 @@ public abstract class Constants
       for (Field field : fields)
       {
          String value = getInitValue(props, field);
+         if (value == null)
+         {
+            continue;
+         }
          if (isPublicFinalString(field))
          {
             set(field, value);
@@ -341,8 +345,11 @@ public abstract class Constants
          if (defaultValue == null)
          {
             // This is definitely a programming error.
-            throw new RuntimeException("Missing @Default annotation on "
-                  + field.getName());
+            //throw new RuntimeException("Missing @Default annotation on "
+            //      + field.getName());
+            // NO, it may not be a programming error.  Groovy adds fields to 
+            // classes which will not contain Default annotations.
+            return null;
          }
          sValue = defaultValue.value();
       }
