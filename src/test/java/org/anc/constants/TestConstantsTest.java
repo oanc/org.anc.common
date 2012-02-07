@@ -4,17 +4,30 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestConstantsTest
 {
-   @Test
-   public void test()
+   TestConstants K;
+   File dir;
+   
+   @Before
+   public void setup()
    {
-      TestConstants K = new TestConstants();
-      File dir = new File(K.OANC);
+      K = new TestConstants();
+      dir = new File(K.OANC);
+   }
+   
+   @Test
+   public void testDir()
+   {
       assertTrue(dir.getPath() + " Not found.", dir.exists());
-      
+   }
+   
+   @Test
+   public void testHeader()
+   {
       File header = new File(dir, K.HEADER);
       assertTrue(header.getPath() + " not found.", header.exists());
    }
