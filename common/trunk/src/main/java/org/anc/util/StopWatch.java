@@ -54,7 +54,7 @@ public class StopWatch
    
    public long elapsed()
    {
-      if (stopped >= started)
+      if (stopped < started)
       {
          // The timer is still running.
          return now() - started;
