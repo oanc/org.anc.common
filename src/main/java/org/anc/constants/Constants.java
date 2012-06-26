@@ -60,7 +60,7 @@ import java.util.Properties;
  * </pre>
  * <p>Each public field in the subclass must be initialized to null and the subclass
  * constructor(s) must call {@code super.init()}. The Constants subclass can contain
- * fields of type String, Boolean, Integer, Floate, and Double. However, the value specified
+ * fields of type String, Boolean, Integer, Float, and Double. However, the value specified
  * by the &#064;Default annotation is always a String.
  * 
  * <p>An instance of the subclass can then be created (usually as a static final 
