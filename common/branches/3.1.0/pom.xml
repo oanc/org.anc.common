@@ -9,7 +9,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.anc</groupId>
 	<artifactId>common</artifactId>
-	<version>3.0.0</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<name>ANC Common Utilities</name>
 	<url>http://www.anc.org/</url>
 	<description>Common utility classes used in most ANC projects.</description>
