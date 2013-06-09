@@ -241,6 +241,7 @@ public abstract class Constants
          in = new FileInputStream(propFile);
       }
       
+      // Then try the class path.
       if (in == null)
       {
          ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -248,7 +249,6 @@ public abstract class Constants
          {
             loader = Constants.class.getClassLoader();
          }
-//         in = ClassLoader.getSystemResourceAsStream(propValue);
          in = loader.getResourceAsStream(propValue);
          if (in == null)
          {
