@@ -1,6 +1,6 @@
 package org.anc.constants;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class TestConstants extends Constants
@@ -24,7 +24,7 @@ public class TestConstants extends Constants
          new TestConstants().save();
          System.out.println("Constants saved.");
       }
-      catch (FileNotFoundException e)
+      catch (IOException e)
       {
          e.printStackTrace();
       }

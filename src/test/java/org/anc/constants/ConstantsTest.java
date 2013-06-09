@@ -1,8 +1,8 @@
 package org.anc.constants;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -235,7 +235,7 @@ public class ConstantsTest
          FileVariables f = new FileVariables();
          f.save();
       }
-      catch (FileNotFoundException e)
+      catch (IOException e)
       {
          // TODO Auto-generated catch block
          e.printStackTrace();

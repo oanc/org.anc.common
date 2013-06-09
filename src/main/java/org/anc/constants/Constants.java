@@ -159,7 +159,7 @@ public abstract class Constants
       String value();
    }
 
-   public void save() throws FileNotFoundException
+   public void save() throws IOException
    {
       String name = getName();
       File file = new File(name);
@@ -174,12 +174,12 @@ public abstract class Constants
       save(file);
    }
    
-   public void save(String path) throws FileNotFoundException
+   public void save(String path) throws IOException
    {
       save(new File(path));
    }
    
-   public void save(File file) throws FileNotFoundException
+   public void save(File file) throws IOException
    {
       Properties props = new Properties();
       Class<? extends Constants> subclass = this.getClass();
@@ -204,11 +204,12 @@ public abstract class Constants
       OutputStream os = new FileOutputStream(file);
       try
       {
+         System.out.println("Wrote " + file.getPath());
          props.store(os, "Constants.");
       }
-      catch (IOException e)
+      finally
       {
-         // TODO : this should be logged.
+         os.close();
       }
    }
    
