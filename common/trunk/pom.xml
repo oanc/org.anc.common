@@ -8,7 +8,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.anc</groupId>
 	<artifactId>common</artifactId>
-	<version>3.1.0</version>
+	<version>3.1.1-SNAPSHOT</version>
 	<name>ANC Common Utilities</name>
 	<url>http://www.anc.org/</url>
 	<description>Common utility classes used in most ANC projects.</description>
@@ -24,9 +24,9 @@
 		<url>http://www.anc.org:8080/hudson/jobs/ANC%20Common</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://www.anc.org/svn/common/tags/3.1.0</connection>
-		<developerConnection>scm:svn:https://www.anc.org/svn/common/tags/3.1.0</developerConnection>
-		<url>http://www.anc.org/svn/common/tags/3.1.0</url>
+		<connection>scm:svn:http://www.anc.org/svn/common</connection>
+		<developerConnection>scm:svn:https://www.anc.org/svn/common</developerConnection>
+		<url>http://www.anc.org/svn/common</url>
 	</scm>
 	<organization>
 		<name>The American National Corpus</name>
