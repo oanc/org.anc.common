@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ANC Common
+Bundle-SymbolicName: org.anc.osgi.common
+Bundle-Version: 1.0.0
+Bundle-Activator: org.anc.osgi.Activator
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.osgi.framework;version="1.3.0"
+Export-Package: !org.anc.osgi, org.anc
