@@ -23,7 +23,7 @@ import java.awt.Insets;
  * Provides functionality for setting the fields of
  * {@link java.awt.GridBagConstraints} objects.
  * <p>
- * One of the biggest drags of working with GridBag layouts is the number of
+ * One of the biggest hurdles working with GridBag layouts is the number of
  * times you need to type the string <tt>GridBagConstraints</tt> into the text
  * editor. The GBC class extends the java.awt.GridBagConstraints class and adds
  * helper methods to set fields and to allow GBC objects to be used as a
@@ -49,7 +49,7 @@ import java.awt.Insets;
  * // Center the controls in the second column
  * gbc.center();
  * // Grow horizontally, and take up all new room along x-axis
- * gbc.horizontal();
+ * gbc.fillHorizontal();
  * gbc.weight(1, 0);
  * aPanel.add(control4, gbc.xy(1,0);
  * aPanel.add(control5, gbc.down());

@@ -3,17 +3,17 @@
 	<parent>
 		<artifactId>parent-pom</artifactId>
 		<groupId>org.anc.maven</groupId>
-		<version>2.2.0</version>
+		<version>2.2.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.anc</groupId>
 	<artifactId>common</artifactId>
-	<version>3.1.0</version>
+	<version>3.1.1-SNAPSHOT</version>
 	<name>ANC Common Utilities</name>
 	<url>http://www.anc.org/</url>
 	<description>Common utility classes used in most ANC projects.</description>
 	<properties>
-		<last.stable.version>3.0.0</last.stable.version>
+		<last.stable.version>3.1.0</last.stable.version>
 	</properties>
 	<issueManagement>
 		<system>Trac</system>
@@ -34,37 +34,14 @@
 	</organization>
 	<build>
 		<finalName>${versioned.name}</finalName>
-		<plugins>
-		<!--  
-  		<plugin>
-  			<groupId>org.apache.felix</groupId>
-  			<artifactId>maven-bundle-plugin</artifactId>
-  			<version>2.1.0</version>
-  			<extensions>true</extensions>
-  			<configuration>
-  				<manifestLocation>META-INF</manifestLocation>
-  				<instructions>
-  					<Bundle-SymbolicName>${base.name}</Bundle-SymbolicName>
-  					<Bundle-Version>${project.version}</Bundle-Version>
-  					<Bundle-Description>ANC Common Utilities</Bundle-Description>
-  					<Bundle-Activator>org.anc.common.Activator</Bundle-Activator>
-  					<Export-Package>org.anc.*</Export-Package>
-  				</instructions>
-  			</configuration>
-  		</plugin>
-  		-->
-		</plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.0</version>
+            </plugin>
+        </plugins>
 	</build>
-	<dependencies>
-		<!--  
-		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>2.9.1</version>
-			<scope>compile</scope>
-		</dependency>
-		-->
-	</dependencies>
 	<distributionManagement>
 		<site>
 			<id>anc-scp</id>
