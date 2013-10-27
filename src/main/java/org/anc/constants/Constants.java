@@ -189,7 +189,8 @@ public abstract class Constants
          if (isPublicFinalString(field) || 
                isPublicFinalInteger(field) || 
                isPublicFinalFloat(field) || 
-               isPublicFinalDouble(field))
+               isPublicFinalDouble(field) ||
+               isPublicFinalBoolean(field))
          {
             try
             {
@@ -197,7 +198,7 @@ public abstract class Constants
             }
             catch (Exception e)
             {
-               // Ignore.
+               throw new IOException("Unable to save field : " + name, e);
             }
          }
       }
