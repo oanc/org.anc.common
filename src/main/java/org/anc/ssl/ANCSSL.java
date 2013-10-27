@@ -39,13 +39,15 @@ public class ANCSSL
 
 class ANCPasswordAuthenticator extends Authenticator
 {
-   private String username;
-   private char[] password;
+//   private String username;
+//   private char[] password;
+   private PasswordAuthentication authentication;
 
    private ANCPasswordAuthenticator(String username, String password)
    {
-      this.username = username;
-      this.password = password.toCharArray();
+//      this.username = username;
+//      this.password = password.toCharArray();
+      authentication = new PasswordAuthentication(username, password.toCharArray());
    }
 
    /**
@@ -54,13 +56,8 @@ class ANCPasswordAuthenticator extends Authenticator
    @Override
    protected PasswordAuthentication getPasswordAuthentication()
    {
-//       System.out.println("Host: " + this.getRequestingHost());
-//       System.out.println("Port: " + this.getRequestingPort());
-//       System.out.println("Protocol: " + this.getRequestingProtocol());
-//       System.out.println("Scheme: " + this.getRequestingScheme());
-//       System.out.println("Prompt: " + this.getRequestingPrompt());
-
-      return new PasswordAuthentication(username, password);
+//      return new PasswordAuthentication(username, password);
+      return authentication;
    }
 
    public static void install(String username, String password)
