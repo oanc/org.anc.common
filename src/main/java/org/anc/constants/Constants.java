@@ -300,8 +300,8 @@ public abstract class Constants
       }
       catch (Exception e)
       {
-         // Ignore exceptions and use the default values.
-//         e.printStackTrace();
+         System.err.println("Unable to load properties from " + propertyName);
+         e.printStackTrace();
          props = new Properties();
       }
 
