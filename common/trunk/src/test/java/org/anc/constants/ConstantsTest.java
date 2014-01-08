@@ -219,27 +219,27 @@ public class ConstantsTest
       assertTrue(actual.equals(expected));
    }
    
-   public static void main(String[] args)
-   {
-      try
-      {
-         C c = new C();
-         System.out.println(c.VALUE);
-         c.save();
-         
-//         Int1 i = new Int1();
-//         i.save();
-         Int2 j = new Int2();
-         j.save();
-         
-         FileVariables f = new FileVariables();
-         f.save();
-      }
-      catch (IOException e)
-      {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-      
-   }
+//   public static void main(String[] args)
+//   {
+//      try
+//      {
+//         C c = new C();
+//         System.out.println(c.VALUE);
+//         c.save();
+//
+////         Int1 i = new Int1();
+////         i.save();
+//         Int2 j = new Int2();
+//         j.save();
+//
+//         FileVariables f = new FileVariables();
+//         f.save();
+//      }
+//      catch (IOException e)
+//      {
+//         // TODO Auto-generated catch block
+//         e.printStackTrace();
+//      }
+//
+//   }
 }
