@@ -4,6 +4,7 @@ import org.junit.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import static org.junit.Assert.*;
 
@@ -25,5 +26,12 @@ public class ResourceLoaderTest
       String string = ResourceLoader.loadString("test.properties");
       System.out.println("Loaded string: " + string);
       assertTrue(string.trim().equals("VALUE=PROPERTY"));
+   }
+
+   @Test
+   public void testGetResource()
+   {
+      URL url = ResourceLoader.getResource("test.properties");
+      assertNotNull(url);
    }
 }
