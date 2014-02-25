@@ -19,6 +19,12 @@ abstract class Base extends Constants
 class BaseVariables extends Base {
    @Default("Foo")
    public final String FOO = null;
+
+   public BaseVariables()
+   {
+      super.init();
+   }
+
 }
 
 public class BaseTest
@@ -27,7 +33,11 @@ public class BaseTest
    public void testBase()
    {
       BaseVariables v = new BaseVariables();
-      assertTrue("Foo".equals(v.FOO));
+      String expected = "Foo";
+      String actual = v.FOO;
+      assertTrue("Actual is null!", v.FOO != null);
+      String message = String.format("Expected: %s Found: %s", expected, actual);
+      assertTrue(message, actual.equals(expected));
    }
 
    public BaseTest()
