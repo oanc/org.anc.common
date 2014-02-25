@@ -5,6 +5,7 @@ import org.anc.io.UTF8Reader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 /**
  * A class that provides utility methods for loading resources from
@@ -58,7 +59,7 @@ public class ResourceLoader
       return result;
    }
 
-   private static ClassLoader getClassLoader()
+   public static ClassLoader getClassLoader()
    {
       ClassLoader loader = Thread.currentThread().getContextClassLoader();
       if (loader == null)
@@ -66,5 +67,10 @@ public class ResourceLoader
          loader = ResourceLoader.class.getClassLoader();
       }
       return loader;
+   }
+
+   public static URL getResource(String name) {
+      ClassLoader loader = getClassLoader();
+      return loader.getResource(name);
    }
 }
