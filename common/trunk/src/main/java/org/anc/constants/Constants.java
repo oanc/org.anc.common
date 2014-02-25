@@ -254,7 +254,8 @@ public abstract class Constants
          in = loader.getResourceAsStream(propValue);
          if (in == null)
          {
-            throw new FileNotFoundException("Properties " + propValue + " not found.");
+            //throw new FileNotFoundException("Properties " + propValue + " not found.");
+            return new Properties();
          }
       }
       // 'in' can not be null or an exception would have been thrown above.
