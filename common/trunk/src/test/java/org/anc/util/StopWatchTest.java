@@ -11,7 +11,7 @@ public class StopWatchTest
    public void testElapsedNotRunning()
    {
       StopWatch timer = new StopWatch();
-      assertTrue("Invalid elapsed time for timer that hasn't been started.", timer.elapsed() < 0.0001);
+      assertTrue("Invalid elapsed time for timer that hasn't been started.", timer.elapsed() == 0L);
    }
    
    @Test
@@ -54,5 +54,15 @@ public class StopWatchTest
          System.out.println("Elapsed interval time is " + elapsed);
          assertTrue("Timed interval is outside expected range", elapsed >= min && elapsed <= max);
       }
+   }
+
+   @Test
+   public void testToString()
+   {
+      StopWatch timer = new StopWatch();
+      System.out.println(timer.toString());
+      assertTrue("00:00:000".equals(timer.toString()));
+      assertTrue(timer.elapsed() == 0);
+      assertTrue("00:00:00:00 UTC (+0000)".equals(timer.toString("HH:mm:ss:SS z (Z)")));
    }
 }
