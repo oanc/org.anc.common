@@ -16,6 +16,11 @@
  */
 package org.anc.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
+
 /**
  * A very simple class for collecting rudimentary timing information.
  * 
@@ -31,7 +36,14 @@ public class StopWatch
     * will be set to -1;
     */
    private long stopped;
-   
+
+   private static DateFormat format;
+
+   static {
+      format = new SimpleDateFormat("mm:ss:SSS");
+      format.setTimeZone(TimeZone.getTimeZone("UTC"));
+   }
+
    public StopWatch()
    {
       started = -1;
@@ -61,7 +73,19 @@ public class StopWatch
       }
       return stopped - started;
    }
-   
+
+   public String toString()
+   {
+      return format.format(elapsed());
+   }
+
+   public String toString(String format)
+   {
+      DateFormat df = new SimpleDateFormat(format);
+      df.setTimeZone(TimeZone.getTimeZone("UTC"));
+      return df.format(elapsed());
+   }
+
    protected long now()
    {
       return System.currentTimeMillis();
