@@ -42,7 +42,7 @@ public class ResourceLoader
    public static String loadString(String name) throws IOException
    {
       InputStream stream = open(name);
-      if (name == null)
+      if (stream == null)
       {
          throw new IOException("Resource not found: " + name);
       }
