@@ -3,6 +3,7 @@ package org.anc.common;
 //import org.osgi.framework.BundleActivator;
 //import org.osgi.framework.BundleContext;
 
+@Deprecated
 public class Activator //implements BundleActivator
 {
 //   /*

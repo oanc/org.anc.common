@@ -25,7 +25,7 @@ import java.io.FileFilter;
  * @author Keith Suderman
  * @version 1.0
  */
-
+@Deprecated
 public class ANCFileFilter implements FileFilter
 {
    protected boolean acceptDirectories = true;
