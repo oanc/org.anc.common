@@ -61,6 +61,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -77,19 +93,27 @@
             <version>1.8</version>
             <scope>provided</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.spockframework</groupId>-->
-            <!--<artifactId>spock-core</artifactId>-->
-            <!--<version>0.7-groovy-2.0</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
     </dependencies>
-    <!--
-	<distributionManagement>
-		<site>
-			<id>anc-scp</id>
-			<url>scp://suderman@anc.org:22022/home/www/anc/projects/anc-common</url>
-		</site>
-	</distributionManagement>
-	-->
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <!--
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
+                -->
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
