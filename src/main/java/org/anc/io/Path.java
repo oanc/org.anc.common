@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
  * @author Keith Suderman
  * @version 1.0
  */
+@Deprecated
 public class Path implements Iterable<String>
 {
    protected List<String> components = new ArrayList<String>();

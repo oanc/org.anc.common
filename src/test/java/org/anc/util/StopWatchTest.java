@@ -49,8 +49,8 @@ public class StopWatchTest
             e.printStackTrace();
          }
          long elapsed = timer.elapsed();
-         long min = expected - 10;
-         long max = expected + 10;
+         long min = expected - 100;
+         long max = expected + 100;
          System.out.println("Elapsed interval time is " + elapsed);
          assertTrue("Timed interval is outside expected range", elapsed >= min && elapsed <= max);
       }
